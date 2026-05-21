@@ -1,0 +1,25 @@
+<svg width="720" height="620" viewBox="0 0 720 620" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Energía limpia y movilidad eléctrica</title>
+  <desc id="desc">Cargador electrico, vehiculo y paneles solares.</desc>
+  <rect width="720" height="620" rx="30" fill="#EEF4F1"/>
+  <circle cx="520" cy="148" r="70" fill="#F4DF9C"/>
+  <path d="M84 486H636" stroke="#143D35" stroke-width="18" stroke-linecap="round"/>
+  <rect x="410" y="180" width="104" height="306" rx="24" fill="#143D35"/>
+  <rect x="438" y="222" width="48" height="74" rx="10" fill="#DFF2EB"/>
+  <path d="M462 324V384C462 417 489 444 522 444H542" stroke="#0F7C72" stroke-width="18" stroke-linecap="round"/>
+  <path d="M454 252L438 280H461L450 302L486 262H462L474 252" stroke="#0F7C72" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M144 372H340C382 372 416 406 416 448V486H104V434C104 400 111 372 144 372Z" fill="#295B8D"/>
+  <path d="M176 326H298C330 326 356 346 374 376H136C144 346 154 326 176 326Z" fill="#7EC8BE"/>
+  <circle cx="174" cy="486" r="38" fill="#13201D"/>
+  <circle cx="342" cy="486" r="38" fill="#13201D"/>
+  <circle cx="174" cy="486" r="14" fill="#FFFFFF"/>
+  <circle cx="342" cy="486" r="14" fill="#FFFFFF"/>
+  <g transform="translate(96 126)">
+    <rect x="0" y="0" width="228" height="116" rx="12" fill="#FFFFFF" stroke="#DFE7E3" stroke-width="6"/>
+    <path d="M18 38H210M18 78H210M76 12V104M152 12V104" stroke="#0F7C72" stroke-width="5"/>
+  </g>
+  <g transform="translate(118 258)">
+    <rect x="0" y="0" width="206" height="76" rx="12" fill="#FFFFFF" stroke="#DFE7E3" stroke-width="6"/>
+    <path d="M20 26H186M20 52H186M68 8V68M136 8V68" stroke="#B5893E" stroke-width="5"/>
+  </g>
+</svg>
