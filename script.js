@@ -9,8 +9,16 @@ function getWhatsAppNumber() {
   return document.body.dataset.whatsappNumber || siteConfig.whatsappNumber;
 }
 
+function getWhatsAppMessage() {
+  return document.body.dataset.whatsappMessage || siteConfig.whatsappMessage;
+}
+
+function getWhatsAppLabel() {
+  return document.body.dataset.whatsappLabel || "SRC Consulting";
+}
+
 function buildWhatsAppUrl() {
-  const text = encodeURIComponent(siteConfig.whatsappMessage);
+  const text = encodeURIComponent(getWhatsAppMessage());
   return `https://wa.me/${getWhatsAppNumber()}?text=${text}`;
 }
 
@@ -310,7 +318,17 @@ document.querySelectorAll("[data-ev-wizard]").forEach((wizard) => {
 
   const contactAdvisor = () => {
     const data = getData();
-    const message = `Hola, quiero hablar con un asesor sobre devolución de IVA EV. Soy ${data.get("nombreCompleto") || "un cliente"} y mi pago inicial estimado es ${formatCurrency(calculation.initialPayment)}.`;
+    const message = [
+      "Hola, busco asesoría de SRC Consulting sobre devolución de IVA y beneficios UPME para vehículo eléctrico o híbrido.",
+      `Nombre o razón social: ${data.get("nombreCompleto") || "No indicado"}`,
+      `Identificación: ${data.get("tipoIdentificacion") || "No indicada"} ${data.get("numeroIdentificacion") || ""}`.trim(),
+      `Vehículo: ${data.get("marcaVehiculo") || "Marca no indicada"} ${data.get("modeloVehiculo") || "modelo no indicado"}`,
+      `Valor factura: ${formatCurrency(Number(data.get("valorFactura") || 0))}`,
+      `Certificado UPME: ${data.get("certificadoUpme") || "No indicado"}`,
+      `Recuperación estimada DIAN: ${formatCurrency(calculation.refund)}`,
+      `Pago inicial estimado 50%: ${formatCurrency(calculation.initialPayment)}`,
+      "Vengo del simulador UPME/DIAN del sitio web y quiero continuar la evaluación de viabilidad."
+    ].join("\n");
     window.open(buildCustomWhatsAppUrl(message), "_blank", "noopener");
   };
 
@@ -807,6 +825,7 @@ if (document.body.classList.contains("manglar-homepage")) {
 
 if (document.body.dataset.hideWhatsappWidget !== "true") {
   const widget = document.createElement("div");
+  const whatsappLabel = getWhatsAppLabel();
   widget.className = "whatsapp-widget";
   widget.innerHTML = `
     <div class="whatsapp-hint">¿Cómo podemos ayudarte?</div>
@@ -823,8 +842,8 @@ if (document.body.dataset.hideWhatsappWidget !== "true") {
         <a class="whatsapp-contact-card" href="${buildWhatsAppUrl()}" target="_blank" rel="noopener">
           <span class="whatsapp-avatar">${whatsappIcon}</span>
           <span>
-            <strong>Equipo legal</strong>
-            <small>Línea de WhatsApp de Cárdenas Romero Abogados</small>
+            <strong>${whatsappLabel}</strong>
+            <small>Línea de WhatsApp de ${whatsappLabel}</small>
           </span>
           <span class="whatsapp-mini">${whatsappIcon}</span>
         </a>
