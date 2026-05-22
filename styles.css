@@ -1774,10 +1774,17 @@ h3 {
 .ev-simulator {
   position: relative;
   overflow: hidden;
+  padding-top: clamp(42px, 7vw, 92px);
   background:
     radial-gradient(circle at 88% 10%, rgba(101, 200, 50, 0.2), transparent 28%),
     radial-gradient(circle at 14% 88%, rgba(101, 200, 50, 0.1), transparent 30%),
     linear-gradient(180deg, #070a0b 0%, #101617 100%);
+}
+
+.ev-simulator--first {
+  min-height: calc(100vh - 83px);
+  display: grid;
+  align-content: start;
 }
 
 .wizard-shell {
