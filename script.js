@@ -69,7 +69,8 @@ async function sendSiteEmail({ subject, text, replyTo, recipient = "legal", file
 
   if (!response.ok) {
     const result = await response.json().catch(() => ({}));
-    throw new Error(result.error || "No fue posible enviar el correo.");
+    const detail = result.detail && (result.detail.message || result.detail.error || JSON.stringify(result.detail));
+    throw new Error([result.error, detail].filter(Boolean).join(" — ") || "No fue posible enviar el correo.");
   }
 
   return response.json();
@@ -112,7 +113,7 @@ document.querySelectorAll("[data-intake-form]").forEach((form) => {
       alert("Solicitud enviada correctamente. Nuestro equipo revisará la información.");
       form.reset();
     } catch (error) {
-      alert("No fue posible enviar el correo automático. Revisa la configuración de RESEND_API_KEY y EMAIL_FROM en Vercel.");
+      alert(`No fue posible enviar el correo automático: ${error.message}`);
     }
   });
 });
@@ -373,9 +374,13 @@ document.querySelectorAll("[data-ev-wizard]").forEach((wizard) => {
           attachments
         })
       });
-      if (!response.ok) throw new Error("No fue posible enviar el correo automático.");
+      if (!response.ok) {
+        const result = await response.json().catch(() => ({}));
+        const detail = result.detail && (result.detail.message || result.detail.error || JSON.stringify(result.detail));
+        throw new Error([result.error, detail].filter(Boolean).join(" — ") || "No fue posible enviar el correo automático.");
+      }
     } catch (error) {
-      alert("No fue posible enviar automáticamente el formulario con todos los documentos. Active el backend de correo para continuar sin dejar archivos por fuera.");
+      alert(`No fue posible enviar automáticamente el formulario con todos los documentos: ${error.message}`);
       throw error;
     }
 
@@ -610,7 +615,7 @@ document.querySelectorAll("[data-tutela-form]").forEach((form) => {
       form.reset();
       toggleReviewMode();
     } catch (error) {
-      alert("No fue posible enviar el correo automático. Revisa la configuración de RESEND_API_KEY y EMAIL_FROM en Vercel.");
+      alert(`No fue posible enviar el correo automático: ${error.message}`);
     }
   });
 
@@ -644,7 +649,7 @@ document.querySelectorAll("[data-electrolinera-form]").forEach((form) => {
       alert("Consulta enviada correctamente. Nuestro equipo se comunicará contigo.");
       form.reset();
     } catch (error) {
-      alert("No fue posible enviar el correo automático. Revisa la configuración de RESEND_API_KEY y EMAIL_FROM en Vercel.");
+      alert(`No fue posible enviar el correo automático: ${error.message}`);
     }
   });
 });
