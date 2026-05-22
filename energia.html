@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Trámites e infraestructura de carga eléctrica | SRC Consulting</title>
+    <meta name="description" content="Consultoría integral para importación y legalización de vehículos eléctricos, infraestructura de cargadores rápidos, beneficios UPME y devolución de IVA.">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Trámites e infraestructura de carga eléctrica | SRC Consulting">
+    <meta property="og:description" content="Consultoría integral para importación y legalización de vehículos eléctricos, infraestructura de cargadores rápidos, beneficios UPME y devolución de IVA.">
+    <meta property="og:image" content="assets/src-consulting-energy-logo.svg">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Trámites e infraestructura de carga eléctrica | SRC Consulting">
+    <meta name="twitter:description" content="Consultoría integral para importación y legalización de vehículos eléctricos, infraestructura de cargadores rápidos, beneficios UPME y devolución de IVA.">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body class="energy-brand-page" data-whatsapp-number="573224591377">
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="SRC Consulting inicio">
+        <img class="energy-header-logo" src="assets/src-consulting-energy-logo.svg" alt="SRC Consulting">
+      </a>
+      <nav class="nav-links" aria-label="Navegación principal">
+        <a href="juridica.html">Asesoría jurídica</a>
+        <a class="active" href="energia.html">Energías limpias</a>
+        <a data-whatsapp href="#">WhatsApp</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="service-hero energy-hero">
+        <div class="service-copy">
+          <img class="energy-hero-logo" src="assets/src-consulting-energy-logo.svg" alt="SRC Consulting">
+          <p class="eyebrow">Consultoría integral · Movilidad eléctrica · Beneficios tributarios</p>
+          <h1>Soluciones para movilidad eléctrica, permisos e importación EV.</h1>
+          <p class="lead">Acompañamos importación y legalización de vehículos eléctricos, prueba dinámica ANLA / CEPD, homologación, vistos buenos, infraestructura de cargadores rápidos y gestión de beneficios UPME y DIAN.</p>
+          <div class="hero-actions">
+            <a class="button primary" data-whatsapp href="#">Evaluar proyecto</a>
+            <a class="button secondary" href="#alcance">Ver alcance</a>
+          </div>
+        </div>
+        <img class="service-visual" src="assets/src-consulting-logo-hero.png" alt="SRC Consulting">
+      </section>
+
+      <section id="alcance" class="service-grid-section" aria-labelledby="energy-services">
+        <div class="section-heading compact">
+          <p class="eyebrow">Servicios principales</p>
+          <h2 id="energy-services">Tres frentes especializados para movilidad eléctrica</h2>
+        </div>
+        <div class="service-grid energy-pillars">
+          <article class="service-card">
+            <p class="tag">Importación EV</p>
+            <h3>Importación y legalización de vehículos eléctricos</h3>
+            <p>Acompañamiento integral en clasificación arancelaria, homologación, vistos buenos, prueba dinámica ANLA, RUNT y procesos regulatorios para la nacionalización de vehículos eléctricos en Colombia.</p>
+          </article>
+          <article class="service-card">
+            <p class="tag">Infraestructura EV</p>
+            <h3>Cargadores rápidos y puesta en funcionamiento</h3>
+            <p>Importación, instalación y puesta en operación de cargadores rápidos para vehículos eléctricos, incluyendo obra civil, cumplimiento RETIE, legalización, integración tecnológica y activación de plataformas de operación y pagos.</p>
+          </article>
+          <article class="service-card">
+            <p class="tag">Beneficios tributarios EV</p>
+            <h3>Gestión integral de devolución de IVA y beneficios UPME</h3>
+            <p>Estructuración y presentación de solicitudes ante UPME y DIAN para acceder a devolución de IVA y beneficios tributarios aplicables a vehículos eléctricos e híbridos.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="workflow ev-simulator" aria-labelledby="energy-flow" data-ev-wizard>
+        <div class="section-heading compact">
+          <p class="eyebrow">Simulador tributario EV</p>
+          <h2 id="energy-flow">Simule su devolución de IVA</h2>
+          <p class="section-copy">Valide si su vehículo aplica para beneficios tributarios y conozca el valor estimado de recuperación.</p>
+        </div>
+        <div class="wizard-shell">
+          <div class="wizard-progress" aria-label="Progreso del simulador">
+            <span class="active" data-progress-step="1">1</span>
+            <span data-progress-step="2">2</span>
+            <span data-progress-step="3">3</span>
+            <span data-progress-step="4">4</span>
+            <span data-progress-step="5">5</span>
+          </div>
+
+          <form class="ev-wizard-form" data-ev-form>
+            <section class="wizard-step active" data-step="1">
+              <p class="tag">Paso 1 · Datos obligatorios</p>
+              <h3>Inicie con los datos base del trámite</h3>
+              <div class="ev-final-grid intake-grid">
+                <label>Nombre completo o razón social<input type="text" name="nombreCompleto" data-client-name required></label>
+                <label>Tipo de identificación
+                  <select name="tipoIdentificacion" data-client-id-type required>
+                    <option value="">Seleccione</option>
+                    <option value="C.C.">C.C.</option>
+                    <option value="NIT">NIT</option>
+                    <option value="C.E.">C.E.</option>
+                    <option value="Pasaporte">Pasaporte</option>
+                  </select>
+                </label>
+                <label>Número de identificación<input type="text" inputmode="numeric" pattern="[0-9]*" name="numeroIdentificacion" data-numeric-only data-client-id-number required></label>
+                <label>Teléfono<input type="tel" inputmode="numeric" pattern="[0-9]*" name="telefono" data-numeric-only required></label>
+                <label>Correo electrónico<input type="email" name="correo" data-client-email required></label>
+                <label>Ciudad<input type="text" name="ciudad" required></label>
+                <label>Marca del vehículo<input type="text" name="marcaVehiculo" required></label>
+                <label>Modelo del vehículo<input type="text" name="modeloVehiculo" required></label>
+                <label class="full-field ev-value-field">
+                  <span>Valor de factura electrónica</span>
+                  <input type="text" inputmode="numeric" name="valorFactura" data-vehicle-value placeholder="Ej: 120.000.000" autocomplete="off" required>
+                </label>
+              </div>
+              <div class="ev-results">
+                <article>
+                  <span>Recuperación estimada DIAN</span>
+                  <strong data-refund-result>$0</strong>
+                </article>
+                <article>
+                  <span>Honorarios estimados</span>
+                  <strong data-fee-result>$0</strong>
+                </article>
+                <article>
+                  <span>Valor neto aproximado a recibir</span>
+                  <strong data-net-result>$0</strong>
+                </article>
+              </div>
+              <p class="ev-disclaimer">Estimación preliminar no vinculante sujeta a validación documental y tributaria.</p>
+              <div class="wizard-actions">
+                <button class="button primary" type="button" data-next-step>Continuar</button>
+              </div>
+            </section>
+
+            <section class="wizard-step" data-step="2" hidden>
+              <button class="wizard-back" type="button" data-prev-step aria-label="Volver al paso anterior">← Paso anterior</button>
+              <p class="tag">Paso 2 · Certificado UPME</p>
+              <h3>¿Ya cuenta con Certificado UPME?</h3>
+              <div class="choice-grid" role="group" aria-label="Certificado UPME">
+                <button class="choice-button" type="button" data-upme-choice="Sí">Sí</button>
+                <button class="choice-button" type="button" data-upme-choice="No">No</button>
+              </div>
+              <input type="hidden" name="certificadoUpme" data-upme-input>
+              <div class="upme-panel" data-upme-panel hidden>
+                <div>
+                  <h4>Documentos necesarios para solicitar el Certificado UPME</h4>
+                  <div class="document-accordion">
+                    <details class="upload-accordion" open>
+                      <summary><span>Factura electrónica del vehículo</span><strong data-upload-status>Pendiente</strong></summary>
+                      <p>Documento soporte de adquisición que acredita valor, comprador, vendedor y características generales del vehículo.</p>
+                      <label class="drop-zone" data-drop-zone>Arrastre el archivo aquí o seleccione desde su equipo<input type="file" name="upmeFacturaElectronica" data-doc-upload data-doc-label="UPME - Factura electrónica del vehículo"></label>
+                    </details>
+                    <details class="upload-accordion">
+                      <summary><span>Cédula del comprador</span><strong data-upload-status>Pendiente</strong></summary>
+                      <p>Documento de identificación del solicitante o representante que adelanta el trámite.</p>
+                      <label class="drop-zone" data-drop-zone>Arrastre el archivo aquí o seleccione desde su equipo<input type="file" name="upmeCedulaComprador" data-doc-upload data-doc-label="UPME - Cédula del comprador"></label>
+                    </details>
+                    <details class="upload-accordion">
+                      <summary><span>RUT actualizado</span><strong data-upload-status>Pendiente</strong></summary>
+                      <p>Registro Único Tributario actualizado con la información del solicitante.</p>
+                      <label class="drop-zone" data-drop-zone>Arrastre el archivo aquí o seleccione desde su equipo<input type="file" name="upmeRutActualizado" data-doc-upload data-doc-label="UPME - RUT actualizado"></label>
+                    </details>
+                    <details class="upload-accordion">
+                      <summary><span>Datos del vehículo</span><strong data-upload-status>Pendiente</strong></summary>
+                      <p>Ficha o documento con marca, línea, modelo, versión, características técnicas y condición eléctrica o híbrida.</p>
+                      <label class="drop-zone" data-drop-zone>Arrastre el archivo aquí o seleccione desde su equipo<input type="file" name="upmeDatosVehiculo" data-doc-upload data-doc-label="UPME - Datos del vehículo"></label>
+                    </details>
+                    <details class="upload-accordion">
+                      <summary><span>VIN o número de chasis</span><strong data-upload-status>Pendiente</strong></summary>
+                      <p>Soporte donde se identifique el VIN o chasis del vehículo objeto de la solicitud.</p>
+                      <label class="drop-zone" data-drop-zone>Arrastre el archivo aquí o seleccione desde su equipo<input type="file" name="upmeVinChasis" data-doc-upload data-doc-label="UPME - VIN o número de chasis"></label>
+                    </details>
+                    <details class="upload-accordion">
+                      <summary><span>Correo registrado en el RUT</span><strong data-upload-status>Pendiente</strong></summary>
+                      <p>Correo electrónico que coincide con la información tributaria del solicitante.</p>
+                      <label class="drop-zone" data-drop-zone>Arrastre el archivo aquí o seleccione desde su equipo<input type="file" name="upmeCorreoRut" data-doc-upload data-doc-label="UPME - Correo registrado en el RUT"></label>
+                    </details>
+                  </div>
+                </div>
+                <div class="we-handle">
+                  <h4>Nosotros realizamos</h4>
+                  <ul class="premium-checklist">
+                    <li>Registro en plataforma UPME</li>
+                    <li>Radicación de solicitud</li>
+                    <li>Seguimiento del trámite</li>
+                    <li>Atención de requerimientos</li>
+                    <li>Obtención del certificado</li>
+                  </ul>
+                  <button class="button primary" type="button" data-next-step>Continuar</button>
+                </div>
+              </div>
+            </section>
+
+            <section class="wizard-step" data-step="3" hidden>
+              <button class="wizard-back" type="button" data-prev-step aria-label="Volver al paso anterior">← Paso anterior</button>
+              <p class="tag">Paso 3 · Solicitud DIAN</p>
+              <h3>Documentos requeridos para la solicitud DIAN</h3>
+              <div class="document-accordion document-grid">
+                <details class="upload-accordion" open>
+                  <summary><span>Certificado UPME</span><strong data-upload-status>Pendiente</strong></summary>
+                  <p>Certificado que soporta la procedencia del beneficio tributario aplicable.</p>
+                  <label class="drop-zone" data-drop-zone>Arrastre el archivo aquí o seleccione desde su equipo<input type="file" name="dianCertificadoUpme" data-doc-upload data-doc-label="DIAN - Certificado UPME"></label>
+                </details>
+                <details class="upload-accordion">
+                  <summary><span>Factura electrónica</span><strong data-upload-status>Pendiente</strong></summary>
+                  <p>Factura electrónica de compra del vehículo sobre la cual se estructura la solicitud.</p>
+                  <label class="drop-zone" data-drop-zone>Arrastre el archivo aquí o seleccione desde su equipo<input type="file" name="dianFacturaElectronica" data-doc-upload data-doc-label="DIAN - Factura electrónica"></label>
+                </details>
+                <details class="upload-accordion">
+                  <summary><span>Cédula</span><strong data-upload-status>Pendiente</strong></summary>
+                  <p>Documento de identificación del solicitante o representante autorizado.</p>
+                  <label class="drop-zone" data-drop-zone>Arrastre el archivo aquí o seleccione desde su equipo<input type="file" name="dianCedula" data-doc-upload data-doc-label="DIAN - Cédula"></label>
+                </details>
+                <details class="upload-accordion">
+                  <summary><span>RUT actualizado</span><strong data-upload-status>Pendiente</strong></summary>
+                  <p>Registro tributario actualizado para validar datos fiscales y correo registrado.</p>
+                  <label class="drop-zone" data-drop-zone>Arrastre el archivo aquí o seleccione desde su equipo<input type="file" name="dianRutActualizado" data-doc-upload data-doc-label="DIAN - RUT actualizado"></label>
+                </details>
+                <details class="upload-accordion">
+                  <summary><span>Certificación bancaria</span><strong data-upload-status>Pendiente</strong></summary>
+                  <p>Certificación de la cuenta bancaria donde se proyecta la devolución.</p>
+                  <label class="drop-zone" data-drop-zone>Arrastre el archivo aquí o seleccione desde su equipo<input type="file" name="dianCertificacionBancaria" data-doc-upload data-doc-label="DIAN - Certificación bancaria"></label>
+                </details>
+              </div>
+              <div class="wizard-actions">
+                <button class="button primary" type="button" data-next-step>Continuar</button>
+              </div>
+            </section>
+
+            <section class="wizard-step" data-step="4" hidden>
+              <button class="wizard-back" type="button" data-prev-step aria-label="Volver al paso anterior">← Paso anterior</button>
+              <p class="tag">Paso 4 · Forma de pago</p>
+              <h3>Forma de pago</h3>
+              <p class="section-copy">Los honorarios se pagan en dos momentos: el primer 50% al iniciar la solicitud, estudio y estructuración del trámite, y el segundo 50% previo a la radicación final de la solicitud ante la DIAN.</p>
+              <div class="ev-results payment-results">
+                <article>
+                  <span>Honorarios estimados</span>
+                  <strong data-payment-fee>$0</strong>
+                </article>
+                <article>
+                  <span>Pago inicial 50%</span>
+                  <strong data-payment-initial>$0</strong>
+                </article>
+                <article>
+                  <span>Pago final 50%</span>
+                  <strong data-payment-final>$0</strong>
+                </article>
+              </div>
+              <div class="wizard-actions payment-actions">
+                <button class="button primary" type="button" data-next-step>Continuar</button>
+              </div>
+              <p class="ev-disclaimer" data-payment-message></p>
+            </section>
+
+            <section class="wizard-step" data-step="5" hidden>
+              <button class="wizard-back" type="button" data-prev-step aria-label="Volver al paso anterior">← Paso anterior</button>
+              <p class="tag">Paso 5 · Envío final</p>
+              <h3>Resumen del trámite</h3>
+              <div class="ev-summary" data-ev-summary></div>
+              <label class="ev-final-grid full-field">Comentarios adicionales<textarea name="comentarios" rows="4"></textarea></label>
+              <div class="wizard-actions">
+                <button class="button primary" type="button" data-final-pay>Enviar y pagar en línea</button>
+                <button class="button secondary" type="button" data-final-advisor>Enviar y hablar con asesor</button>
+              </div>
+            </section>
+          </form>
+          <div class="wizard-confirmation" data-ev-confirmation hidden>
+            <p class="tag">Solicitud recibida</p>
+            <h3>Su información fue recibida correctamente.</h3>
+            <p>Nuestro equipo revisará la documentación y se comunicará con usted para iniciar la evaluación de la solicitud.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="electrolinera-section" id="electrolinera" aria-labelledby="electrolinera-title">
+        <div class="electrolinera-content">
+          <div class="electrolinera-copy">
+            <p class="eyebrow">Infraestructura EV · Proyecto llave en mano</p>
+            <h2 id="electrolinera-title">Empieza tu proyecto de electrolinera desde $270 millones.</h2>
+            <p class="lead">Tú pones el lote, nosotros lo dejamos totalmente funcional. Nos encargamos de todo en 5 meses.</p>
+            <ul class="electrolinera-list">
+              <li>
+                <strong>2 supercargadores de 120 a 150 kW</strong>
+                <span>Potencia de carga rápida para vehículos eléctricos de cualquier marca.</span>
+              </li>
+              <li>
+                <strong>Obra civil, instalación y puesta en marcha</strong>
+                <span>Adecuación del espacio, acometida eléctrica, RETIE y conexión a plataforma de pagos.</span>
+              </li>
+              <li>
+                <strong>Trámites y permisos</strong>
+                <span>Gestionamos todos los permisos técnicos, legales y ante el operador de red.</span>
+              </li>
+              <li>
+                <strong>Entrega operativa en 5 meses</strong>
+                <span>Desde la firma del acuerdo hasta la primera carga facturada.</span>
+              </li>
+            </ul>
+          </div>
+          <div class="electrolinera-contact-box">
+            <p class="eyebrow">Contáctanos</p>
+            <h3>¿Tienes un lote o espacio disponible?</h3>
+            <p>Déjanos tus datos y un asesor te contactará para evaluar la viabilidad de tu proyecto sin costo.</p>
+            <form class="electrolinera-form" data-electrolinera-form>
+              <label>
+                Nombre completo
+                <input type="text" name="nombreEV" placeholder="Tu nombre o razón social" required>
+              </label>
+              <label>
+                Teléfono o WhatsApp
+                <input type="tel" name="telefonoEV" placeholder="+57 300 000 0000" required>
+              </label>
+              <label>
+                Correo electrónico
+                <input type="email" name="correoEV" placeholder="correo@empresa.com" required>
+              </label>
+              <label>
+                Ciudad y dirección aproximada del lote
+                <input type="text" name="ubicacionEV" placeholder="Ej: Bogotá, Zona Norte" required>
+              </label>
+              <button class="button primary" type="submit">Solicitar evaluación gratuita</button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <section class="why-us-section" aria-labelledby="why-us-title">
+        <div class="why-us-heading">
+          <p class="eyebrow">Resultados · Casos reales</p>
+          <h2 id="why-us-title">¿Por qué elegirnos?</h2>
+          <p>Más que consultores, somos un equipo con resultados probados. Le ganamos al ANLA y la obligamos a responder una prueba dinámica en 48 horas.</p>
+        </div>
+        <div class="why-us-grid">
+          <div class="why-us-stats">
+            <article class="why-stat">
+              <strong>48 h</strong>
+              <span>Tiempo que el juez le dio al ANLA para responder tras nuestra tutela</span>
+            </article>
+            <article class="why-stat">
+              <strong>ANLA</strong>
+              <span>Autoridad Nacional de Licencias Ambientales obligada a expedir el CEPD y el Visto Bueno Protocolo de Montreal</span>
+            </article>
+            <article class="why-stat">
+              <strong>Tutela ganada</strong>
+              <span>Juzgado 3° Civil del Circuito de Ejecución de Sentencias de Bogotá D.C. concedió la protección</span>
+            </article>
+          </div>
+          <div class="why-us-ruling">
+            <p class="ruling-label">Fallo judicial · Juzgado 3° Civil del Circuito · Bogotá D.C.</p>
+            <img src="assets/fallo-tutela-anla.jpeg" alt="Fallo de tutela contra ANLA — Juzgado 3° Civil del Circuito de Ejecución de Sentencias de Bogotá D.C." class="ruling-img">
+            <p class="ruling-caption">Mediante acción de tutela, el juzgado ordenó a la <strong>AUTORIDAD NACIONAL DE LICENCIAS AMBIENTALES —ANLA—</strong> expedir el Certificado de Emisiones en Prueba Dinámica (CEPD) y el Visto Bueno por Protocolo de Montreal en un término improrrogable de <strong>48 horas</strong>.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>SRC Consulting · Energías limpias · Legal Advisory</p>
+      <div>
+        <a href="index.html">Inicio</a>
+        <a href="juridica.html">Servicios jurídicos</a>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

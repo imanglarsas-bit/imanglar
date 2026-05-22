@@ -1,0 +1,17 @@
+<svg width="760" height="760" viewBox="0 0 760 760" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">SRC Consulting visual</title>
+  <desc id="desc">Composición abstracta de asesoría legal, energía limpia y Colombia.</desc>
+  <rect width="760" height="760" rx="32" fill="#EEF4F1"/>
+  <circle cx="378" cy="378" r="276" fill="#DFF2EB"/>
+  <path d="M148 502C218 384 295 322 380 316C478 309 552 378 624 247" stroke="#0F7C72" stroke-width="30" stroke-linecap="round"/>
+  <path d="M148 566H612" stroke="#143D35" stroke-width="24" stroke-linecap="round"/>
+  <path d="M246 566L336 224H426L516 566" stroke="#143D35" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M282 350H480" stroke="#B5893E" stroke-width="18" stroke-linecap="round"/>
+  <path d="M304 426H458" stroke="#B5893E" stroke-width="18" stroke-linecap="round"/>
+  <rect x="252" y="140" width="256" height="84" rx="18" fill="#143D35"/>
+  <text x="380" y="194" text-anchor="middle" font-family="Arial, sans-serif" font-size="42" font-weight="800" fill="#FFFFFF">SRC</text>
+  <circle cx="570" cy="190" r="48" fill="#295B8D"/>
+  <path d="M548 191H593M574 168L552 199H574L562 220L596 181H574L585 168" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="194" cy="222" r="44" fill="#FFFFFF"/>
+  <path d="M194 190V253M164 220H224" stroke="#0F7C72" stroke-width="12" stroke-linecap="round"/>
+</svg>

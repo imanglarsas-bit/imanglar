@@ -1,0 +1,7 @@
+<svg width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">SRC Consulting</title>
+  <desc id="desc">Logo SRC principal.</desc>
+  <rect width="96" height="96" rx="18" fill="#143D35"/>
+  <text x="48" y="61" text-anchor="middle" font-family="Arial Black, Arial, Helvetica, sans-serif" font-size="38" font-weight="900" letter-spacing="-3" fill="#FFFFFF">SRC</text>
+  <path d="M19 72H77" stroke="#B5893E" stroke-width="3" stroke-linecap="round"/>
+</svg>

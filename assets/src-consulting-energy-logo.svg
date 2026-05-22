@@ -1,0 +1,20 @@
+<svg width="720" height="180" viewBox="0 0 720 180" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">SRC Consulting</title>
+  <desc id="desc">Logo de SRC Consulting para trámites, permisos e infraestructura de carga eléctrica.</desc>
+  <rect width="720" height="180" rx="28" fill="#070A0B"/>
+  <rect x="26" y="36" width="126" height="108" rx="28" fill="url(#mark-bg)" stroke="#1E2527"/>
+  <text x="89" y="90" text-anchor="middle" font-family="Inter, Arial, Helvetica, sans-serif" font-size="36" font-weight="900" letter-spacing="3" fill="#FFFFFF">SRC</text>
+  <rect x="58" y="112" width="62" height="4" rx="2" fill="#65C832"/>
+  <text x="184" y="88" font-family="Inter, Arial, Helvetica, sans-serif" font-size="48" font-weight="900" letter-spacing="2" fill="#65C832">SRC</text>
+  <text x="310" y="88" font-family="Inter, Arial, Helvetica, sans-serif" font-size="48" font-weight="760" letter-spacing="1" fill="#FFFFFF">Consulting</text>
+  <text x="184" y="124" font-family="Inter, Arial, Helvetica, sans-serif" font-size="17" font-weight="500" letter-spacing="1" fill="#B8B8B8">Consultoría integral</text>
+  <circle cx="358" cy="118" r="4" fill="#65C832"/>
+  <text x="378" y="124" font-family="Inter, Arial, Helvetica, sans-serif" font-size="17" font-weight="500" letter-spacing="1" fill="#B8B8B8">Trámites y permisos ante entidades</text>
+  <text x="184" y="150" font-family="Inter, Arial, Helvetica, sans-serif" font-size="17" font-weight="500" letter-spacing="1" fill="#B8B8B8">Soluciones para infraestructura de carga eléctrica</text>
+  <defs>
+    <linearGradient id="mark-bg" x1="26" y1="36" x2="152" y2="144" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#202426"/>
+      <stop offset="1" stop-color="#111516"/>
+    </linearGradient>
+  </defs>
+</svg>

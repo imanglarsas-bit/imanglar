@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 280" role="img" aria-labelledby="title desc">
+  <title id="title">Inversiones Manglar</title>
+  <desc id="desc">Logo vectorial con isotipo M y texto Inversiones Manglar, fondo transparente.</desc>
+
+  <defs>
+    <linearGradient id="manglarGreen" x1="45" y1="225" x2="118" y2="42" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#6FB914"/>
+      <stop offset="1" stop-color="#9BDA18"/>
+    </linearGradient>
+    <linearGradient id="manglarBlue" x1="190" y1="42" x2="122" y2="225" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1BD2F4"/>
+      <stop offset="1" stop-color="#0096C8"/>
+    </linearGradient>
+    <linearGradient id="manglarWhite" x1="0" y1="0" x2="0" y2="230" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="0.55" stop-color="#F8FAFC"/>
+      <stop offset="1" stop-color="#E7EDF3"/>
+    </linearGradient>
+    <filter id="softLogoShadow" x="-20%" y="-20%" width="140%" height="150%" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="10" stdDeviation="8" flood-color="#000000" flood-opacity="0.22"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#softLogoShadow)">
+    <!-- Isotipo M construido con trazos redondeados, sin fondo -->
+    <path d="M42 220 L92 56" stroke="url(#manglarGreen)" stroke-width="44" stroke-linecap="round"/>
+    <path d="M92 56 L142 220" stroke="url(#manglarWhite)" stroke-width="44" stroke-linecap="round"/>
+    <path d="M142 220 L192 56" stroke="url(#manglarBlue)" stroke-width="44" stroke-linecap="round"/>
+    <path d="M192 56 L242 220" stroke="url(#manglarWhite)" stroke-width="44" stroke-linecap="round"/>
+  </g>
+
+  <g filter="url(#softLogoShadow)">
+    <text
+      x="310"
+      y="105"
+      font-family="Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+      font-size="56"
+      font-weight="300"
+      letter-spacing="6"
+      fill="#FFFFFF">INVERSIONES</text>
+
+    <text
+      x="308"
+      y="206"
+      font-family="Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+      font-size="92"
+      font-weight="800"
+      letter-spacing="5"
+      fill="#FFFFFF">MANGLAR</text>
+  </g>
+</svg>
