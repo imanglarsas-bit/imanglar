@@ -1,8 +1,11 @@
 // Endpoint preparado para envío automático con adjuntos:
 // POST /api/email/send-evaluation
 //
-// Variable de entorno requerida en producción:
+// Variables de entorno requeridas en producción:
 // RESEND_API_KEY=re_xxxxxxxxxxxxx
+// EMAIL_FROM="Inversiones Manglar <notificaciones@imanglar.com>"
+// EMAIL_TO_EVCAR=evcarelectricol@gmail.com
+// EMAIL_TO_LEGAL=consultasjuridicasgje@gmail.com
 //
 // Este endpoint usa la API HTTP de Resend para evitar exponer credenciales
 // en el frontend. Si se prefiere SMTP, reemplace este bloque por el proveedor
@@ -16,6 +19,12 @@ module.exports = async function sendEvaluation(request, response) {
   }
 
   const apiKey = process.env.RESEND_API_KEY;
+  const emailFrom = process.env.EMAIL_FROM || "Inversiones Manglar <onboarding@resend.dev>";
+  const recipients = {
+    evcar: process.env.EMAIL_TO_EVCAR || "evcarelectricol@gmail.com",
+    legal: process.env.EMAIL_TO_LEGAL || "consultasjuridicasgje@gmail.com"
+  };
+
   if (!apiKey) {
     response.status(500).json({ error: "Falta configurar RESEND_API_KEY." });
     return;
@@ -25,11 +34,18 @@ module.exports = async function sendEvaluation(request, response) {
     subject,
     text,
     replyTo,
+    recipient = "evcar",
     attachments = []
   } = request.body || {};
 
   if (!subject || !text) {
     response.status(400).json({ error: "Faltan asunto o cuerpo del correo." });
+    return;
+  }
+
+  const to = recipients[recipient];
+  if (!to) {
+    response.status(400).json({ error: "Destinatario no permitido." });
     return;
   }
 
@@ -40,8 +56,8 @@ module.exports = async function sendEvaluation(request, response) {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      from: "SRC Consulting <noreply@srcgroup.co>",
-      to: ["evcarelectricol@gmail.com"],
+      from: emailFrom,
+      to: [to],
       reply_to: replyTo || undefined,
       subject,
       text,

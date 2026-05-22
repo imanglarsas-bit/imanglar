@@ -34,8 +34,49 @@ document.querySelectorAll("[data-documents]").forEach((link) => {
   }
 });
 
+function fileToBase64Attachment(file, prefix = "") {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      resolve({
+        filename: `${prefix}${file.name}`,
+        content: String(reader.result).split(",")[1] || ""
+      });
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+async function sendSiteEmail({ subject, text, replyTo, recipient = "legal", files = [] }) {
+  const attachments = await Promise.all(
+    files
+      .filter((file) => file && file.name)
+      .map((file) => fileToBase64Attachment(file))
+  );
+
+  const response = await fetch("/api/email/send-evaluation", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      subject,
+      text,
+      replyTo,
+      recipient,
+      attachments
+    })
+  });
+
+  if (!response.ok) {
+    const result = await response.json().catch(() => ({}));
+    throw new Error(result.error || "No fue posible enviar el correo.");
+  }
+
+  return response.json();
+}
+
 document.querySelectorAll("[data-intake-form]").forEach((form) => {
-  form.addEventListener("submit", (event) => {
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     const data = new FormData(form);
@@ -57,10 +98,22 @@ document.querySelectorAll("[data-intake-form]").forEach((form) => {
       data.get("casoInicial") || "No indicado",
       "",
       `Soportes seleccionados: ${supportFiles.length ? supportFiles.map((file) => file.name).join(", ") : "No adjuntados"}`,
-      "Observación: por seguridad del navegador, los archivos deben adjuntarse manualmente al correo."
+      "Los soportes cargados por el usuario se adjuntan a este correo cuando el backend de correo está activo."
     ].join("\n");
 
-    window.location.href = buildMailUrl(subject, message);
+    try {
+      await sendSiteEmail({
+        subject,
+        text: message,
+        replyTo: data.get("correoInicial"),
+        recipient: "legal",
+        files: supportFiles
+      });
+      alert("Solicitud enviada correctamente. Nuestro equipo revisará la información.");
+      form.reset();
+    } catch (error) {
+      alert("No fue posible enviar el correo automático. Revisa la configuración de RESEND_API_KEY y EMAIL_FROM en Vercel.");
+    }
   });
 });
 
@@ -105,12 +158,6 @@ document.querySelectorAll("[data-ev-wizard]").forEach((wizard) => {
   const formatCurrency = (value) => currency.format(value).replace(/\s/g, " ");
   const getData = () => new FormData(form);
   const getDocumentsList = () => [...uploadedDocuments.values()].map((item) => `${item.label}: ${item.file.name}`);
-  const fileToBase64 = (file) => new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(String(reader.result).split(",")[1] || "");
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
 
   const updateProgress = () => {
     progressItems.forEach((item) => {
@@ -310,10 +357,9 @@ document.querySelectorAll("[data-ev-wizard]").forEach((wizard) => {
       `Comentarios adicionales: ${data.get("comentarios") || "Sin comentarios"}`
     ].join("\n");
 
-    const attachments = await Promise.all([...uploadedDocuments.values()].map(async ({ label, file }) => ({
-      filename: `${label} - ${file.name}`,
-      content: await fileToBase64(file)
-    })));
+    const attachments = await Promise.all(
+      [...uploadedDocuments.values()].map(({ label, file }) => fileToBase64Attachment(file, `${label} - `))
+    );
 
     try {
       const response = await fetch("/api/email/send-evaluation", {
@@ -323,6 +369,7 @@ document.querySelectorAll("[data-ev-wizard]").forEach((wizard) => {
           subject,
           text: body,
           replyTo: data.get("correo"),
+          recipient: "evcar",
           attachments
         })
       });
@@ -500,7 +547,7 @@ document.querySelectorAll("[data-tutela-form]").forEach((form) => {
     input.addEventListener("change", toggleReviewMode);
   });
 
-  form.addEventListener("submit", (event) => {
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     const data = new FormData(form);
@@ -541,11 +588,30 @@ document.querySelectorAll("[data-tutela-form]").forEach((form) => {
       isReview ? "Instruccion: adjuntar un solo PDF con el escrito completo de tutela y todos sus anexos." : `Derecho que considero vulnerado: ${data.get("derechoPrincipal") || "No indicado"}`,
       isReview ? "" : `Derechos constitucionales seleccionados: ${selectedRights.length ? selectedRights.join(", ") : "No indicados"}`,
       "",
-      isReview || isPower ? "Observación: por seguridad del navegador, los archivos deben adjuntarse manualmente al correo que se abrirá." : "Hechos:",
+      isReview || isPower ? "Los documentos cargados por el usuario se adjuntan a este correo cuando el backend de correo está activo." : "Hechos:",
       isReview ? "" : data.get("hechos") || "No indicados"
     ].filter(Boolean).join("\n");
 
-    window.location.href = buildMailUrl(subject, message);
+    const files = [
+      reviewPdf,
+      powerIdentityPdf,
+      ...powerEvidenceFiles
+    ].filter((file) => file && file.name);
+
+    try {
+      await sendSiteEmail({
+        subject,
+        text: message,
+        replyTo: data.get("correoPoder") || "",
+        recipient: "legal",
+        files
+      });
+      alert("Solicitud enviada correctamente. Nuestro equipo revisará la documentación.");
+      form.reset();
+      toggleReviewMode();
+    } catch (error) {
+      alert("No fue posible enviar el correo automático. Revisa la configuración de RESEND_API_KEY y EMAIL_FROM en Vercel.");
+    }
   });
 
   toggleReviewMode();
@@ -554,7 +620,7 @@ document.querySelectorAll("[data-tutela-form]").forEach((form) => {
 const whatsappIcon = '<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16.04 3.2A12.65 12.65 0 0 0 5.1 22.22L3.4 28.8l6.73-1.62A12.66 12.66 0 1 0 16.04 3.2Zm0 2.28a10.38 10.38 0 0 1 8.76 15.96 10.33 10.33 0 0 1-13.93 3.36l-.45-.27-3.99.96 1.02-3.88-.29-.47A10.37 10.37 0 0 1 16.04 5.48Zm-4.08 4.83c-.23 0-.6.08-.92.43-.32.35-1.21 1.18-1.21 2.87s1.24 3.34 1.41 3.57c.17.23 2.39 3.82 5.94 5.2 2.95 1.16 3.55.93 4.19.87.64-.06 2.06-.84 2.35-1.65.29-.81.29-1.51.2-1.65-.08-.14-.32-.23-.66-.4-.35-.17-2.06-1.02-2.38-1.13-.32-.12-.55-.17-.78.17-.23.35-.89 1.13-1.09 1.36-.2.23-.4.26-.75.09-.35-.17-1.47-.54-2.8-1.72-1.03-.92-1.73-2.06-1.93-2.41-.2-.35-.02-.54.15-.71.16-.15.35-.4.52-.61.17-.2.23-.35.35-.58.12-.23.06-.43-.03-.61-.09-.17-.78-1.88-1.07-2.58-.28-.67-.57-.58-.78-.59h-.67Z"/></svg>';
 
 document.querySelectorAll("[data-electrolinera-form]").forEach((form) => {
-  form.addEventListener("submit", (event) => {
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
     const data = new FormData(form);
     const subject = "Consulta proyecto de electrolinera — SRC Consulting";
@@ -568,7 +634,18 @@ document.querySelectorAll("[data-electrolinera-form]").forEach((form) => {
       "",
       "El solicitante desea recibir información sobre el proyecto llave en mano de electrolinera (desde $270 millones)."
     ].join("\n");
-    window.location.href = buildMailUrl(subject, body);
+    try {
+      await sendSiteEmail({
+        subject,
+        text: body,
+        replyTo: data.get("correoEV"),
+        recipient: "evcar"
+      });
+      alert("Consulta enviada correctamente. Nuestro equipo se comunicará contigo.");
+      form.reset();
+    } catch (error) {
+      alert("No fue posible enviar el correo automático. Revisa la configuración de RESEND_API_KEY y EMAIL_FROM en Vercel.");
+    }
   });
 });
 
