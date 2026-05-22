@@ -819,7 +819,7 @@ if (document.body.dataset.hideWhatsappWidget !== "true") {
           <span class="whatsapp-avatar">${whatsappIcon}</span>
           <span>
             <strong>Equipo legal</strong>
-            <small>Línea de WhatsApp de SRC Consulting</small>
+            <small>Línea de WhatsApp de Cárdenas Romero Abogados</small>
           </span>
           <span class="whatsapp-mini">${whatsappIcon}</span>
         </a>
