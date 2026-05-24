@@ -3013,9 +3013,9 @@ h3 {
 /* ── Cards Grid ── */
 .mg-cards-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 22px;
-  max-width: 1300px;
+  max-width: 1440px;
   margin: 0 auto;
 }
 
@@ -3068,6 +3068,7 @@ h3 {
 
 .mg-card--legal   .mg-card-accent { background: var(--mg-navy); }
 .mg-card--energy  .mg-card-accent { background: linear-gradient(90deg, var(--mg-blue) 0%, var(--mg-green) 100%); }
+.mg-card--digital .mg-card-accent { background: linear-gradient(90deg, #00a6d6 0%, #7bdc18 100%); }
 .mg-card--nature  .mg-card-accent { background: linear-gradient(90deg, var(--mg-green) 0%, #a3d43a 100%); }
 
 /* Card body */
@@ -3093,6 +3094,7 @@ h3 {
 
 .mg-card--legal  .mg-card-tag { color: var(--mg-navy);   background: rgba(0, 43, 70, 0.07); }
 .mg-card--energy .mg-card-tag { color: #006B8F;            background: rgba(0, 166, 214, 0.1); }
+.mg-card--digital .mg-card-tag { color: #87e64a;           background: rgba(124, 220, 24, 0.12); }
 .mg-card--nature .mg-card-tag { color: #3d6a05;            background: rgba(124, 181, 24, 0.12); }
 
 /* Card logo */
@@ -3109,6 +3111,15 @@ h3 {
 .mg-card-logo--wide {
   max-width: 260px;
   height: 42px;
+}
+
+.mg-card-logo--digital {
+  width: min(100%, 250px);
+  height: auto;
+  max-width: 250px;
+  border-radius: 14px;
+  margin: -4px 0 24px;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.24);
 }
 
 /* Mucuba brand mark */
@@ -3188,6 +3199,7 @@ h3 {
 
 .mg-card--legal  .mg-card-btn { color: var(--mg-navy); }
 .mg-card--energy .mg-card-btn { color: #006B8F; }
+.mg-card--digital .mg-card-btn { color: #87e64a; }
 .mg-card--nature .mg-card-btn { color: #3d6a05; }
 
 .mg-card-arrow {
@@ -3218,6 +3230,29 @@ h3 {
 
 /* Card subtle tint */
 .mg-card--energy { background: linear-gradient(160deg, #ffffff 0%, #f7fdff 100%); }
+.mg-card--digital {
+  background:
+    radial-gradient(circle at 82% 18%, rgba(124, 220, 24, 0.18), transparent 32%),
+    radial-gradient(circle at 18% 86%, rgba(0, 166, 214, 0.16), transparent 34%),
+    linear-gradient(160deg, #06101c 0%, #001b2e 100%);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 2px 8px rgba(0, 27, 46, 0.08),
+    0 18px 52px rgba(0, 27, 46, 0.18);
+}
+
+.mg-card--digital .mg-card-title {
+  color: #ffffff;
+}
+
+.mg-card--digital .mg-card-desc {
+  color: rgba(255, 255, 255, 0.74);
+}
+
+.mg-card--digital .mg-card-footer {
+  border-top-color: rgba(255, 255, 255, 0.12);
+}
+
 .mg-card--nature { background: linear-gradient(160deg, #ffffff 0%, #faffe8 100%); }
 
 /* ── Footer ── */
@@ -3383,15 +3418,6 @@ h3 {
 @media (max-width: 1024px) {
   .mg-cards-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .mg-card--nature {
-    grid-column: 1 / -1;
-    min-height: 420px;
-  }
-
-  .mg-card--nature .mg-card-body {
-    max-width: 640px;
   }
 }
 
