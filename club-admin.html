@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Administración Mucuba Club</title>
+    <meta name="robots" content="noindex">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body class="mucuba-club-page mucuba-admin-page" data-hide-whatsapp-widget="true">
+    <header class="club-header">
+      <a class="club-brand" href="club.html" aria-label="Mucuba Club">
+        <img src="assets/manglar-logo.svg" alt="Inversiones Manglar">
+      </a>
+      <nav class="club-nav" aria-label="Administración Mucuba Club">
+        <a href="club.html">Ver landing</a>
+        <a href="#publicaciones">Publicaciones</a>
+        <a href="#editor">Editor</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="club-section admin-hero">
+        <div class="club-section-head">
+          <p class="club-eyebrow">Administrador</p>
+          <h1>Gestión de alojamientos Mucuba Club</h1>
+          <p>Crea, modifica, oculta y bloquea fechas para habitaciones y glampings. Las publicaciones activas serán las únicas visibles en la landing pública.</p>
+        </div>
+      </section>
+
+      <section class="club-section admin-layout">
+        <div id="publicaciones">
+          <div class="club-section-head compact">
+            <p class="club-eyebrow">Publicaciones</p>
+            <h2>Alojamientos cargados</h2>
+          </div>
+          <div class="admin-list" data-admin-list></div>
+        </div>
+
+        <div id="editor">
+          <div class="club-section-head compact">
+            <p class="club-eyebrow">Editor</p>
+            <h2 data-editor-title>Nueva publicación</h2>
+          </div>
+          <form class="club-form admin-form" data-admin-form>
+            <input type="hidden" name="id">
+            <div class="club-field full-field">
+              <label for="adminStatus">Estado</label>
+              <select id="adminStatus" name="status">
+                <option value="active">Activo en landing</option>
+                <option value="hidden">Oculto</option>
+              </select>
+            </div>
+            <div class="club-field">
+              <label for="adminName">Nombre del alojamiento</label>
+              <input id="adminName" name="name" type="text" placeholder="Ej: Glamping Bosque Andino" required>
+            </div>
+            <div class="club-field">
+              <label for="adminType">Tipo</label>
+              <select id="adminType" name="type" required>
+                <option value="habitacion">Habitación de hotel</option>
+                <option value="glamping">Glamping</option>
+              </select>
+            </div>
+            <div class="club-field">
+              <label for="adminPrice">Precio por noche</label>
+              <input id="adminPrice" name="price" type="text" inputmode="numeric" placeholder="Ej: 320.000" required>
+            </div>
+            <div class="club-field">
+              <label for="adminGuests">Huéspedes</label>
+              <input id="adminGuests" name="guests" type="number" min="1" value="2" required>
+            </div>
+            <div class="club-field">
+              <label for="adminBeds">Camas</label>
+              <input id="adminBeds" name="beds" type="number" min="1" value="1" required>
+            </div>
+            <div class="club-field">
+              <label for="adminBaths">Baños</label>
+              <input id="adminBaths" name="baths" type="number" min="1" value="1" required>
+            </div>
+            <div class="club-field full-field">
+              <label for="adminSummary">Descripción</label>
+              <textarea id="adminSummary" name="summary" rows="4" placeholder="Describe el ambiente, vista, privacidad, acceso y experiencia del alojamiento." required></textarea>
+            </div>
+            <div class="club-field full-field">
+              <label for="adminAmenities">Amenidades</label>
+              <input id="adminAmenities" name="amenities" type="text" placeholder="Chimenea, jacuzzi, desayuno, wifi, parqueadero">
+            </div>
+            <div class="club-field full-field">
+              <label for="adminBlocked">Días bloqueados</label>
+              <textarea id="adminBlocked" name="blockedDates" rows="3" placeholder="2026-07-12, 2026-07-13, 2026-08-02"></textarea>
+              <small>Escribe fechas exactas separadas por coma. Esos días no aparecerán disponibles en la búsqueda pública.</small>
+            </div>
+            <div class="admin-blocker full-field">
+              <label>Bloquear rango rápido</label>
+              <div>
+                <input type="date" data-block-start>
+                <input type="date" data-block-end>
+                <button class="club-button club-button-secondary" type="button" data-add-block-range>Agregar rango</button>
+              </div>
+            </div>
+            <div class="club-field full-field">
+              <label for="adminPhotos">Fotos</label>
+              <div class="club-upload">
+                <input id="adminPhotos" name="photos" type="file" accept="image/*" multiple>
+                <span>Si subes nuevas fotos, reemplazarán las fotos actuales. La primera será la portada.</span>
+              </div>
+            </div>
+            <div class="club-form-actions full-field">
+              <button class="club-button club-button-primary" type="submit">Guardar publicación</button>
+              <button class="club-button club-button-secondary" type="button" data-new-listing>Nueva publicación</button>
+              <button class="club-button club-button-secondary" type="button" data-reset-club>Restaurar demo</button>
+            </div>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <footer class="club-footer">
+      <span>Mucuba Club · Panel administrador</span>
+      <a href="club.html">Volver a la landing</a>
+    </footer>
+
+    <script src="club-admin.js"></script>
+  </body>
+</html>

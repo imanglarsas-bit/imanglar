@@ -11,12 +11,14 @@ const demoListings = [
     id: "habitacion-lago",
     name: "Habitación Vista al Lago",
     type: "habitacion",
+    status: "active",
     price: 280000,
     guests: 2,
     beds: 1,
     baths: 1,
     summary: "Habitación privada dentro del hotel con vista hacia el paisaje de Guatavita, cama doble, baño privado y acceso a zonas comunes del club.",
     amenities: ["Vista", "Baño privado", "Wifi", "Desayuno", "Parqueadero"],
+    blockedDates: [],
     photos: [],
     tone: "lake"
   },
@@ -24,12 +26,14 @@ const demoListings = [
     id: "glamping-bosque",
     name: "Glamping Bosque Andino",
     type: "glamping",
+    status: "active",
     price: 420000,
     guests: 2,
     beds: 1,
     baths: 1,
     summary: "Glamping premium rodeado de naturaleza, diseñado para escapadas privadas con mayor independencia, fogata exterior y experiencia de descanso.",
     amenities: ["Fogata", "Terraza", "Ducha caliente", "Desayuno", "Pet friendly"],
+    blockedDates: [],
     photos: [],
     tone: "forest"
   },
@@ -37,31 +41,31 @@ const demoListings = [
     id: "suite-familiar",
     name: "Suite Familiar del Club",
     type: "habitacion",
+    status: "active",
     price: 360000,
     guests: 4,
     beds: 2,
     baths: 1,
     summary: "Suite amplia para familias o grupos pequeños, con dos camas, baño privado, zona de estar y cercanía a las áreas sociales del hotel.",
     amenities: ["Familias", "Zona de estar", "Wifi", "TV", "Parqueadero"],
+    blockedDates: [],
     photos: [],
     tone: "suite"
   }
 ];
 
 const listNode = document.querySelector("[data-club-list]");
-const form = document.querySelector("[data-club-form]");
 const modal = document.querySelector("[data-club-modal]");
 const modalContent = document.querySelector("[data-club-modal-content]");
 const closeModal = document.querySelector("[data-close-club]");
+const searchForm = document.querySelector("[data-club-search]");
+const searchStatus = document.querySelector("[data-search-status]");
 let currentFilter = "todos";
-let listings = loadListings();
+let searchState = { checkIn: "", checkOut: "", guests: 1 };
+let listings = normalizeListings(loadListings());
 
 function formatCurrency(value) {
   return currency.format(Number(value || 0)).replace(/\s/g, " ");
-}
-
-function parseMoney(value) {
-  return Number(String(value).replace(/[^\d]/g, "")) || 0;
 }
 
 function loadListings() {
@@ -73,8 +77,12 @@ function loadListings() {
   }
 }
 
-function saveListings() {
-  localStorage.setItem(CLUB_STORAGE_KEY, JSON.stringify(listings));
+function normalizeListings(items) {
+  return items.map((item) => ({
+    ...item,
+    status: item.status || "active",
+    blockedDates: Array.isArray(item.blockedDates) ? item.blockedDates : []
+  }));
 }
 
 function photoStyle(listing, index = 0) {
@@ -88,9 +96,43 @@ function photoStyle(listing, index = 0) {
   return `background:${gradients[listing.tone] || gradients.forest}`;
 }
 
+function daysBetween(start, end) {
+  if (!start || !end) return 0;
+  const first = new Date(`${start}T00:00:00`);
+  const second = new Date(`${end}T00:00:00`);
+  return Math.max(0, Math.round((second - first) / 86400000));
+}
+
+function datesInRange(start, end) {
+  const dates = [];
+  const nights = daysBetween(start, end);
+  if (!nights) return dates;
+  const cursor = new Date(`${start}T00:00:00`);
+  for (let index = 0; index < nights; index += 1) {
+    dates.push(cursor.toISOString().split("T")[0]);
+    cursor.setDate(cursor.getDate() + 1);
+  }
+  return dates;
+}
+
+function isAvailable(listing, checkIn, checkOut) {
+  if (!checkIn || !checkOut) return true;
+  const blocked = new Set(listing.blockedDates || []);
+  return !datesInRange(checkIn, checkOut).some((date) => blocked.has(date));
+}
+
+function getVisibleListings() {
+  return listings.filter((listing) => {
+    if (listing.status !== "active") return false;
+    if (currentFilter !== "todos" && listing.type !== currentFilter) return false;
+    if (Number(searchState.guests || 1) > Number(listing.guests || 1)) return false;
+    return isAvailable(listing, searchState.checkIn, searchState.checkOut);
+  });
+}
+
 function renderListings() {
-  const filtered = currentFilter === "todos" ? listings : listings.filter((item) => item.type === currentFilter);
-  listNode.innerHTML = filtered.map((listing) => `
+  const visibleListings = getVisibleListings();
+  listNode.innerHTML = visibleListings.length ? visibleListings.map((listing) => `
     <article class="club-card" data-open-stay="${listing.id}">
       <div class="club-card-photo" style="${photoStyle(listing)}">
         <span>${listing.type === "glamping" ? "Glamping" : "Habitación"}</span>
@@ -111,14 +153,19 @@ function renderListings() {
         </div>
       </div>
     </article>
-  `).join("");
+  `).join("") : `<div class="club-empty">No encontramos alojamientos disponibles para esos criterios. Prueba otras fechas o reduce el número de huéspedes.</div>`;
 }
 
-function daysBetween(start, end) {
-  if (!start || !end) return 0;
-  const first = new Date(`${start}T00:00:00`);
-  const second = new Date(`${end}T00:00:00`);
-  return Math.max(0, Math.round((second - first) / 86400000));
+function updateSearchStatus() {
+  const { checkIn, checkOut, guests } = searchState;
+  if (!checkIn || !checkOut) {
+    searchStatus.textContent = "Selecciona fechas y número de huéspedes para ver alojamientos disponibles.";
+    return;
+  }
+  const nights = daysBetween(checkIn, checkOut);
+  searchStatus.textContent = nights
+    ? `${nights} noche${nights === 1 ? "" : "s"} · ${guests} huésped${Number(guests) === 1 ? "" : "es"} · ${getVisibleListings().length} alojamiento${getVisibleListings().length === 1 ? "" : "s"} disponible${getVisibleListings().length === 1 ? "" : "s"}.`
+    : "La fecha de salida debe ser posterior a la fecha de entrada.";
 }
 
 function openStay(id) {
@@ -128,6 +175,10 @@ function openStay(id) {
   modal.showModal();
   const today = new Date().toISOString().split("T")[0];
   modalContent.querySelectorAll("input[type='date']").forEach((input) => input.min = today);
+  const bookingForm = modalContent.querySelector("[data-booking-form]");
+  if (searchState.checkIn) bookingForm.elements.checkIn.value = searchState.checkIn;
+  if (searchState.checkOut) bookingForm.elements.checkOut.value = searchState.checkOut;
+  if (searchState.guests) bookingForm.elements.guests.value = Math.min(Number(searchState.guests), Number(listing.guests));
   bindBooking(listing);
 }
 
@@ -187,17 +238,21 @@ function bindBooking(listing) {
     const total = nights * Number(listing.price);
     nightsNode.textContent = `${nights} noche${nights === 1 ? "" : "s"}`;
     totalNode.textContent = formatCurrency(total);
-    return { nights, total };
+    return { nights, total, data };
   };
   bookingForm.addEventListener("input", updateTotal);
+  updateTotal();
   bookingForm.addEventListener("submit", async (event) => {
     event.preventDefault();
-    const { nights, total } = updateTotal();
+    const { nights, total, data } = updateTotal();
     if (!nights || total <= 0) {
       alert("Selecciona una fecha de salida posterior a la entrada.");
       return;
     }
-    const data = new FormData(bookingForm);
+    if (!isAvailable(listing, data.get("checkIn"), data.get("checkOut"))) {
+      alert("Este alojamiento tiene una o más noches bloqueadas en el rango seleccionado.");
+      return;
+    }
     const button = bookingForm.querySelector("button");
     button.disabled = true;
     button.textContent = "Creando reserva...";
@@ -227,37 +282,23 @@ function bindBooking(listing) {
   });
 }
 
-function filesToDataUrls(files) {
-  return Promise.all([...files].slice(0, 6).map((file) => new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  })));
-}
-
-form?.addEventListener("submit", async (event) => {
+searchForm?.addEventListener("submit", (event) => {
   event.preventDefault();
-  const data = new FormData(form);
-  const photos = await filesToDataUrls(data.getAll("photos").filter((file) => file.size));
-  const listing = {
-    id: `stay-${Date.now()}`,
-    name: data.get("name").trim(),
-    type: data.get("type"),
-    price: parseMoney(data.get("price")),
-    guests: Number(data.get("guests")),
-    beds: Number(data.get("beds")),
-    baths: Number(data.get("baths")),
-    summary: data.get("summary").trim(),
-    amenities: String(data.get("amenities") || "").split(",").map((item) => item.trim()).filter(Boolean),
-    photos,
-    tone: data.get("type") === "glamping" ? "forest" : "suite"
+  const data = new FormData(searchForm);
+  searchState = {
+    checkIn: data.get("checkIn"),
+    checkOut: data.get("checkOut"),
+    guests: Number(data.get("guests") || 1)
   };
-  listings = [listing, ...listings];
-  saveListings();
-  form.reset();
   renderListings();
-  document.getElementById("alojamientos")?.scrollIntoView({ behavior: "smooth" });
+  updateSearchStatus();
+});
+
+document.querySelector("[data-clear-search]")?.addEventListener("click", () => {
+  searchForm.reset();
+  searchState = { checkIn: "", checkOut: "", guests: 1 };
+  renderListings();
+  updateSearchStatus();
 });
 
 document.querySelectorAll("[data-club-filter]").forEach((button) => {
@@ -265,13 +306,8 @@ document.querySelectorAll("[data-club-filter]").forEach((button) => {
     currentFilter = button.dataset.clubFilter;
     document.querySelectorAll("[data-club-filter]").forEach((item) => item.classList.toggle("active", item === button));
     renderListings();
+    updateSearchStatus();
   });
-});
-
-document.querySelector("[data-reset-club]")?.addEventListener("click", () => {
-  localStorage.removeItem(CLUB_STORAGE_KEY);
-  listings = demoListings;
-  renderListings();
 });
 
 listNode?.addEventListener("click", (event) => {
@@ -302,3 +338,4 @@ if (bookingParam) {
 }
 
 renderListings();
+updateSearchStatus();

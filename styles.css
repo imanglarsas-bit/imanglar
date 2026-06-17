@@ -196,6 +196,48 @@
   display: block;
 }
 
+.club-search-section {
+  padding: 0 clamp(20px, 5vw, 72px) clamp(36px, 5vw, 60px);
+  margin-top: -36px;
+  position: relative;
+  z-index: 3;
+}
+
+.club-search {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) auto auto;
+  gap: 12px;
+  align-items: end;
+  padding: 18px;
+  border: 1px solid var(--club-line);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 22px 64px rgba(16, 41, 24, 0.12);
+}
+
+.club-search label {
+  display: grid;
+  gap: 7px;
+  color: var(--club-ink);
+  font-weight: 900;
+}
+
+.club-search input {
+  min-height: 46px;
+  box-sizing: border-box;
+  border: 1px solid var(--club-line);
+  border-radius: 14px;
+  padding: 0 13px;
+  font: inherit;
+  background: #fbfdf8;
+}
+
+.club-search-status {
+  margin: 12px 0 0;
+  color: var(--club-muted);
+  font-weight: 800;
+}
+
 .club-section {
   padding: clamp(56px, 7vw, 96px) clamp(20px, 5vw, 72px);
 }
@@ -256,6 +298,17 @@
 .club-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 24px 70px rgba(16, 41, 24, 0.14);
+}
+
+.club-empty {
+  grid-column: 1 / -1;
+  padding: 34px;
+  border: 1px dashed rgba(111, 170, 32, 0.38);
+  border-radius: 24px;
+  color: var(--club-muted);
+  background: rgba(255, 255, 255, 0.72);
+  font-weight: 800;
+  text-align: center;
 }
 
 .club-card-photo {
@@ -527,6 +580,135 @@
   text-decoration: none;
 }
 
+.club-footer div {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.admin-hero {
+  padding-bottom: 30px;
+}
+
+.admin-hero h1 {
+  margin: 0;
+  color: var(--club-ink);
+  font-size: clamp(2.4rem, 5vw, 4.8rem);
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+}
+
+.admin-layout {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.75fr) minmax(0, 1.25fr);
+  gap: 26px;
+  padding-top: 24px;
+}
+
+.club-section-head.compact {
+  margin-bottom: 18px;
+}
+
+.club-section-head.compact h2 {
+  font-size: clamp(1.7rem, 3vw, 2.6rem);
+}
+
+.admin-list {
+  display: grid;
+  gap: 14px;
+}
+
+.admin-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: center;
+  padding: 18px;
+  border: 1px solid var(--club-line);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 12px 34px rgba(16, 41, 24, 0.07);
+}
+
+.admin-item h3 {
+  margin: 8px 0 4px;
+}
+
+.admin-item p,
+.admin-item small {
+  margin: 0;
+  color: var(--club-muted);
+}
+
+.admin-status {
+  display: inline-flex;
+  padding: 5px 9px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.admin-status.active {
+  color: #1f3d0d;
+  background: rgba(111, 170, 32, 0.18);
+}
+
+.admin-status.hidden {
+  color: #6c4b00;
+  background: rgba(181, 137, 62, 0.18);
+}
+
+.admin-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-actions button {
+  border: 1px solid var(--club-line);
+  border-radius: 999px;
+  padding: 8px 12px;
+  background: #ffffff;
+  color: var(--club-ink);
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.admin-form {
+  max-width: none;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.club-field small {
+  color: var(--club-muted);
+  line-height: 1.45;
+}
+
+.admin-blocker {
+  display: grid;
+  gap: 8px;
+}
+
+.admin-blocker > label {
+  font-weight: 900;
+}
+
+.admin-blocker div {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.admin-blocker input {
+  min-height: 44px;
+  border: 1px solid var(--club-line);
+  border-radius: 14px;
+  padding: 0 12px;
+  font: inherit;
+}
+
 .club-payment-banner {
   position: fixed;
   top: 0;
@@ -555,7 +737,8 @@
 
 @media (max-width: 1024px) {
   .club-hero,
-  .club-booking-layout {
+  .club-booking-layout,
+  .admin-layout {
     grid-template-columns: 1fr;
   }
 
@@ -563,7 +746,8 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .club-form {
+  .club-form,
+  .club-search {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
@@ -580,7 +764,9 @@
 
   .club-grid,
   .club-form,
-  .club-gallery {
+  .club-gallery,
+  .club-search,
+  .admin-item {
     grid-template-columns: 1fr;
   }
 

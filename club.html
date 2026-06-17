@@ -18,7 +18,6 @@
       </a>
       <nav class="club-nav" aria-label="Navegación Mucuba Club">
         <a href="#alojamientos">Alojamientos</a>
-        <a href="#publicar">Publicar</a>
         <a href="index.html">Grupo</a>
       </nav>
     </header>
@@ -28,10 +27,10 @@
         <div class="club-hero-copy">
           <p class="club-eyebrow">Mucuba Club · Guatavita</p>
           <h1>Hospedaje privado entre hotel, naturaleza y glamping.</h1>
-          <p>Publica habitaciones, glampings y experiencias con fotos, amenidades, disponibilidad básica, precio por noche y pago en línea con MercadoPago.</p>
+          <p>Encuentra habitaciones de hotel y glampings para escapadas privadas en Guatavita, con amenidades claras, precio por noche y pago en línea con MercadoPago.</p>
           <div class="club-hero-actions">
-            <a class="club-button club-button-primary" href="#alojamientos">Ver alojamientos</a>
-            <a class="club-button club-button-secondary" href="#publicar">Publicar habitación</a>
+            <a class="club-button club-button-primary" href="#busqueda">Buscar disponibilidad</a>
+            <a class="club-button club-button-secondary" href="#alojamientos">Ver alojamientos</a>
           </div>
         </div>
         <div class="club-hero-panel" aria-label="Resumen de reservas">
@@ -44,6 +43,23 @@
             <div><b>EV</b><small>Turismo premium</small></div>
           </div>
         </div>
+      </section>
+
+      <section class="club-search-section" id="busqueda" aria-label="Buscar alojamiento">
+        <form class="club-search" data-club-search>
+          <label>Entrada
+            <input name="checkIn" type="date">
+          </label>
+          <label>Salida
+            <input name="checkOut" type="date">
+          </label>
+          <label>Huéspedes
+            <input name="guests" type="number" min="1" value="2">
+          </label>
+          <button class="club-button club-button-primary" type="submit">Buscar</button>
+          <button class="club-button club-button-secondary" type="button" data-clear-search>Limpiar</button>
+        </form>
+        <p class="club-search-status" data-search-status>Selecciona fechas y número de huéspedes para ver alojamientos disponibles.</p>
       </section>
 
       <section class="club-section" id="alojamientos">
@@ -60,63 +76,6 @@
         </div>
 
         <div class="club-grid" data-club-list></div>
-      </section>
-
-      <section class="club-section club-publisher" id="publicar">
-        <div class="club-section-head">
-          <p class="club-eyebrow">Panel rápido</p>
-          <h2>Publicar un nuevo alojamiento</h2>
-          <p>Agrega fotos, especificaciones, amenidades y precio por noche. Esta versión guarda la publicación en este navegador.</p>
-        </div>
-
-        <form class="club-form" data-club-form>
-          <div class="club-field">
-            <label for="stayName">Nombre del alojamiento</label>
-            <input id="stayName" name="name" type="text" placeholder="Ej: Glamping Bosque Andino" required>
-          </div>
-          <div class="club-field">
-            <label for="stayType">Tipo</label>
-            <select id="stayType" name="type" required>
-              <option value="habitacion">Habitación de hotel</option>
-              <option value="glamping">Glamping</option>
-            </select>
-          </div>
-          <div class="club-field">
-            <label for="stayPrice">Precio por noche</label>
-            <input id="stayPrice" name="price" type="text" inputmode="numeric" placeholder="Ej: 320.000" required>
-          </div>
-          <div class="club-field">
-            <label for="stayGuests">Huéspedes</label>
-            <input id="stayGuests" name="guests" type="number" min="1" value="2" required>
-          </div>
-          <div class="club-field">
-            <label for="stayBeds">Camas</label>
-            <input id="stayBeds" name="beds" type="number" min="1" value="1" required>
-          </div>
-          <div class="club-field">
-            <label for="stayBaths">Baños</label>
-            <input id="stayBaths" name="baths" type="number" min="1" value="1" required>
-          </div>
-          <div class="club-field full-field">
-            <label for="staySummary">Descripción</label>
-            <textarea id="staySummary" name="summary" rows="4" placeholder="Describe el ambiente, vista, privacidad, acceso y experiencia del alojamiento." required></textarea>
-          </div>
-          <div class="club-field full-field">
-            <label for="stayAmenities">Amenidades</label>
-            <input id="stayAmenities" name="amenities" type="text" placeholder="Chimenea, jacuzzi, desayuno, wifi, parqueadero">
-          </div>
-          <div class="club-field full-field">
-            <label for="stayPhotos">Fotos</label>
-            <div class="club-upload">
-              <input id="stayPhotos" name="photos" type="file" accept="image/*" multiple>
-              <span>Sube fotos del alojamiento. La primera será la portada.</span>
-            </div>
-          </div>
-          <div class="club-form-actions full-field">
-            <button class="club-button club-button-primary" type="submit">Publicar alojamiento</button>
-            <button class="club-button club-button-secondary" type="button" data-reset-club>Restaurar demo</button>
-          </div>
-        </form>
       </section>
     </main>
 
