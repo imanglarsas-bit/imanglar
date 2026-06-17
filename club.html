@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mucuba Club | Habitaciones y glamping</title>
+    <meta name="description" content="Club de hospedaje en Guatavita con habitaciones tipo hotel, glampings, experiencias privadas y reservas por noche.">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Mucuba Club | Habitaciones y glamping">
+    <meta property="og:description" content="Hospedaje tipo Airbnb con habitaciones de hotel, glampings, amenidades y reserva en línea.">
+    <meta property="og:image" content="assets/manglar-logo.svg">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body class="mucuba-club-page" data-hide-whatsapp-widget="true">
+    <header class="club-header">
+      <a class="club-brand" href="index.html" aria-label="Inversiones Manglar inicio">
+        <img src="assets/manglar-logo.svg" alt="Inversiones Manglar">
+      </a>
+      <nav class="club-nav" aria-label="Navegación Mucuba Club">
+        <a href="#alojamientos">Alojamientos</a>
+        <a href="#publicar">Publicar</a>
+        <a href="index.html">Grupo</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="club-hero">
+        <div class="club-hero-copy">
+          <p class="club-eyebrow">Mucuba Club · Guatavita</p>
+          <h1>Hospedaje privado entre hotel, naturaleza y glamping.</h1>
+          <p>Publica habitaciones, glampings y experiencias con fotos, amenidades, disponibilidad básica, precio por noche y pago en línea con MercadoPago.</p>
+          <div class="club-hero-actions">
+            <a class="club-button club-button-primary" href="#alojamientos">Ver alojamientos</a>
+            <a class="club-button club-button-secondary" href="#publicar">Publicar habitación</a>
+          </div>
+        </div>
+        <div class="club-hero-panel" aria-label="Resumen de reservas">
+          <span>Modelo de hospedaje</span>
+          <strong>Tipo Airbnb</strong>
+          <p>Habitaciones de hotel, glampings, noches privadas y experiencias de club.</p>
+          <div class="club-mini-stats">
+            <div><b>24/7</b><small>Reservas web</small></div>
+            <div><b>COP</b><small>Pago en línea</small></div>
+            <div><b>EV</b><small>Turismo premium</small></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="club-section" id="alojamientos">
+        <div class="club-section-head">
+          <p class="club-eyebrow">Alojamientos publicados</p>
+          <h2>Habitaciones y glampings disponibles</h2>
+          <p>Explora cada espacio, revisa fotos, amenidades, capacidad y precio por noche antes de iniciar la reserva.</p>
+        </div>
+
+        <div class="club-filter-bar" aria-label="Filtros de alojamiento">
+          <button class="club-filter active" type="button" data-club-filter="todos">Todos</button>
+          <button class="club-filter" type="button" data-club-filter="habitacion">Habitaciones</button>
+          <button class="club-filter" type="button" data-club-filter="glamping">Glampings</button>
+        </div>
+
+        <div class="club-grid" data-club-list></div>
+      </section>
+
+      <section class="club-section club-publisher" id="publicar">
+        <div class="club-section-head">
+          <p class="club-eyebrow">Panel rápido</p>
+          <h2>Publicar un nuevo alojamiento</h2>
+          <p>Agrega fotos, especificaciones, amenidades y precio por noche. Esta versión guarda la publicación en este navegador.</p>
+        </div>
+
+        <form class="club-form" data-club-form>
+          <div class="club-field">
+            <label for="stayName">Nombre del alojamiento</label>
+            <input id="stayName" name="name" type="text" placeholder="Ej: Glamping Bosque Andino" required>
+          </div>
+          <div class="club-field">
+            <label for="stayType">Tipo</label>
+            <select id="stayType" name="type" required>
+              <option value="habitacion">Habitación de hotel</option>
+              <option value="glamping">Glamping</option>
+            </select>
+          </div>
+          <div class="club-field">
+            <label for="stayPrice">Precio por noche</label>
+            <input id="stayPrice" name="price" type="text" inputmode="numeric" placeholder="Ej: 320.000" required>
+          </div>
+          <div class="club-field">
+            <label for="stayGuests">Huéspedes</label>
+            <input id="stayGuests" name="guests" type="number" min="1" value="2" required>
+          </div>
+          <div class="club-field">
+            <label for="stayBeds">Camas</label>
+            <input id="stayBeds" name="beds" type="number" min="1" value="1" required>
+          </div>
+          <div class="club-field">
+            <label for="stayBaths">Baños</label>
+            <input id="stayBaths" name="baths" type="number" min="1" value="1" required>
+          </div>
+          <div class="club-field full-field">
+            <label for="staySummary">Descripción</label>
+            <textarea id="staySummary" name="summary" rows="4" placeholder="Describe el ambiente, vista, privacidad, acceso y experiencia del alojamiento." required></textarea>
+          </div>
+          <div class="club-field full-field">
+            <label for="stayAmenities">Amenidades</label>
+            <input id="stayAmenities" name="amenities" type="text" placeholder="Chimenea, jacuzzi, desayuno, wifi, parqueadero">
+          </div>
+          <div class="club-field full-field">
+            <label for="stayPhotos">Fotos</label>
+            <div class="club-upload">
+              <input id="stayPhotos" name="photos" type="file" accept="image/*" multiple>
+              <span>Sube fotos del alojamiento. La primera será la portada.</span>
+            </div>
+          </div>
+          <div class="club-form-actions full-field">
+            <button class="club-button club-button-primary" type="submit">Publicar alojamiento</button>
+            <button class="club-button club-button-secondary" type="button" data-reset-club>Restaurar demo</button>
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <dialog class="club-modal" data-club-modal>
+      <button class="club-modal-close" type="button" data-close-club aria-label="Cerrar">×</button>
+      <div class="club-modal-content" data-club-modal-content></div>
+    </dialog>
+
+    <footer class="club-footer">
+      <span>Mucuba Club · Inversiones Manglar S.A.S.</span>
+      <a href="index.html">Volver al grupo</a>
+    </footer>
+
+    <script src="club.js"></script>
+    <script
+      src="https://automatizacion-meta.onrender.com/chat-widget.js"
+      data-company-id="inversiones-manglar"
+      data-page-context="mucuba-club"
+      data-api-base="https://app.imanglar.com"
+      defer
+    ></script>
+  </body>
+</html>
