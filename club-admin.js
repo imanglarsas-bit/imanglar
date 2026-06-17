@@ -64,11 +64,17 @@ const adminForm = document.querySelector("[data-admin-form]");
 const editorTitle = document.querySelector("[data-editor-title]");
 const loginScreen = document.querySelector("[data-admin-login]");
 const adminContent = document.querySelector("[data-admin-content]");
+const adminNav = document.querySelector("[data-admin-nav]");
+const adminFooter = document.querySelector("[data-admin-footer]");
 const loginForm = document.querySelector("[data-login-form]");
 const loginError = document.querySelector("[data-login-error]");
 const videoInput = document.querySelector("[data-hero-video-input]");
 const videoStatus = document.querySelector("[data-video-status]");
 let listings = normalizeListings(loadListings());
+
+function isAuthenticated() {
+  return sessionStorage.getItem("mucubaAdminAuth") === "true";
+}
 
 function openMediaDb() {
   return new Promise((resolve, reject) => {
@@ -99,11 +105,22 @@ async function deleteMedia(key) {
 
 function showAdmin() {
   loginScreen?.setAttribute("hidden", "");
+  adminNav?.removeAttribute("hidden");
+  adminFooter?.removeAttribute("hidden");
   adminContent?.removeAttribute("hidden");
 }
 
 function requireLogin() {
-  if (sessionStorage.getItem("mucubaAdminAuth") === "true") showAdmin();
+  if (isAuthenticated()) {
+    showAdmin();
+    return;
+  }
+  adminContent?.setAttribute("hidden", "");
+  adminNav?.setAttribute("hidden", "");
+  adminFooter?.setAttribute("hidden", "");
+  if (window.location.hash === "#publicaciones" || window.location.hash === "#editor") {
+    window.history.replaceState({}, "", window.location.pathname);
+  }
 }
 
 loginForm?.addEventListener("submit", (event) => {
@@ -228,6 +245,7 @@ function fillForm(id) {
 
 adminForm?.addEventListener("submit", async (event) => {
   event.preventDefault();
+  if (!isAuthenticated()) return;
   const data = new FormData(adminForm);
   const id = data.get("id") || `stay-${Date.now()}`;
   const existing = listings.find((item) => item.id === id);
@@ -256,6 +274,7 @@ adminForm?.addEventListener("submit", async (event) => {
 });
 
 adminList?.addEventListener("click", (event) => {
+  if (!isAuthenticated()) return;
   const editButton = event.target.closest("[data-edit]");
   const toggleButton = event.target.closest("[data-toggle]");
   const deleteButton = event.target.closest("[data-delete]");
@@ -276,6 +295,7 @@ adminList?.addEventListener("click", (event) => {
 });
 
 document.querySelector("[data-add-block-range]")?.addEventListener("click", () => {
+  if (!isAuthenticated()) return;
   const start = document.querySelector("[data-block-start]").value;
   const end = document.querySelector("[data-block-end]").value;
   const current = parseDateList(adminForm.elements.blockedDates.value);
@@ -283,9 +303,13 @@ document.querySelector("[data-add-block-range]")?.addEventListener("click", () =
   adminForm.elements.blockedDates.value = merged.join(", ");
 });
 
-document.querySelector("[data-new-listing]")?.addEventListener("click", resetForm);
+document.querySelector("[data-new-listing]")?.addEventListener("click", () => {
+  if (!isAuthenticated()) return;
+  resetForm();
+});
 
 document.querySelector("[data-reset-club]")?.addEventListener("click", () => {
+  if (!isAuthenticated()) return;
   if (!confirm("¿Restaurar publicaciones demo? Esto reemplaza los alojamientos guardados en este navegador.")) return;
   listings = demoListings;
   saveListings();
@@ -294,6 +318,7 @@ document.querySelector("[data-reset-club]")?.addEventListener("click", () => {
 });
 
 document.querySelector("[data-save-hero-video]")?.addEventListener("click", async () => {
+  if (!isAuthenticated()) return;
   const file = videoInput?.files?.[0];
   if (!file) {
     videoStatus.textContent = "Selecciona un archivo de video primero.";
@@ -309,6 +334,7 @@ document.querySelector("[data-save-hero-video]")?.addEventListener("click", asyn
 });
 
 document.querySelector("[data-remove-hero-video]")?.addEventListener("click", async () => {
+  if (!isAuthenticated()) return;
   await deleteMedia(HERO_VIDEO_KEY);
   if (videoInput) videoInput.value = "";
   videoStatus.textContent = "Video removido. La landing usará el archivo assets/mucuba-hotel-video.mp4 si existe.";
