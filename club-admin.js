@@ -1,9 +1,4 @@
-const CLUB_STORAGE_KEY = "mucubaClubListings";
-const CLUB_MEDIA_DB = "mucubaClubMedia";
-const CLUB_MEDIA_STORE = "media";
-const HERO_VIDEO_KEY = "heroVideo";
-const ADMIN_USER = "admin";
-const ADMIN_PASSWORD = "Mucuba2026";
+const ADMIN_TOKEN_KEY = "mucubaAdminToken";
 
 const currency = new Intl.NumberFormat("es-CO", {
   style: "currency",
@@ -21,7 +16,7 @@ const demoListings = [
     guests: 2,
     beds: 1,
     baths: 1,
-    summary: "Habitación privada dentro del hotel con vista hacia el paisaje de Guatavita, cama doble, baño privado y acceso a zonas comunes del club.",
+    summary: "Habitación privada dentro del hotel con vista hacia el paisaje de Guatavita, cama doble, baño privado y acceso a zonas comunes del hotel.",
     amenities: ["Vista", "Baño privado", "Wifi", "Desayuno", "Parqueadero"],
     blockedDates: [],
     photos: [],
@@ -36,26 +31,11 @@ const demoListings = [
     guests: 2,
     beds: 1,
     baths: 1,
-    summary: "Glamping premium rodeado de naturaleza, diseñado para escapadas privadas con mayor independencia, fogata exterior y experiencia de descanso.",
+    summary: "Glamping premium rodeado de naturaleza, diseñado para escapadas privadas con independencia, fogata exterior y experiencia de descanso.",
     amenities: ["Fogata", "Terraza", "Ducha caliente", "Desayuno", "Pet friendly"],
     blockedDates: [],
     photos: [],
     tone: "forest"
-  },
-  {
-    id: "suite-familiar",
-    name: "Suite Familiar Mucuba",
-    type: "habitacion",
-    status: "active",
-    price: 360000,
-    guests: 4,
-    beds: 2,
-    baths: 1,
-    summary: "Suite amplia para familias o grupos pequeños, con dos camas, baño privado, zona de estar y cercanía a las áreas sociales del hotel.",
-    amenities: ["Familias", "Zona de estar", "Wifi", "TV", "Parqueadero"],
-    blockedDates: [],
-    photos: [],
-    tone: "suite"
   }
 ];
 
@@ -70,51 +50,42 @@ const loginForm = document.querySelector("[data-login-form]");
 const loginError = document.querySelector("[data-login-error]");
 const videoInput = document.querySelector("[data-hero-video-input]");
 const videoStatus = document.querySelector("[data-video-status]");
-let listings = normalizeListings(loadListings());
+let siteData = { listings: demoListings, heroVideoUrl: "" };
+let listings = normalizeListings(demoListings);
+
+function token() {
+  return sessionStorage.getItem(ADMIN_TOKEN_KEY) || "";
+}
 
 function isAuthenticated() {
-  return sessionStorage.getItem("mucubaAdminAuth") === "true";
+  return Boolean(token());
 }
 
-function openMediaDb() {
-  return new Promise((resolve, reject) => {
-    const request = indexedDB.open(CLUB_MEDIA_DB, 1);
-    request.onupgradeneeded = () => request.result.createObjectStore(CLUB_MEDIA_STORE);
-    request.onsuccess = () => resolve(request.result);
-    request.onerror = () => reject(request.error);
+function authHeaders() {
+  return { Authorization: `Bearer ${token()}` };
+}
+
+async function apiJson(url, options = {}) {
+  const response = await fetch(url, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...(options.headers || {})
+    }
   });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.error || "No fue posible completar la solicitud.");
+  return data;
 }
 
-async function putMedia(key, blob) {
-  const db = await openMediaDb();
-  return new Promise((resolve, reject) => {
-    const request = db.transaction(CLUB_MEDIA_STORE, "readwrite").objectStore(CLUB_MEDIA_STORE).put(blob, key);
-    request.onsuccess = () => resolve();
-    request.onerror = () => reject(request.error);
-  });
-}
-
-async function deleteMedia(key) {
-  const db = await openMediaDb();
-  return new Promise((resolve, reject) => {
-    const request = db.transaction(CLUB_MEDIA_STORE, "readwrite").objectStore(CLUB_MEDIA_STORE).delete(key);
-    request.onsuccess = () => resolve();
-    request.onerror = () => reject(request.error);
-  });
-}
-
-function showAdmin() {
+function showAdminShell() {
   loginScreen?.setAttribute("hidden", "");
   adminNav?.removeAttribute("hidden");
   adminFooter?.removeAttribute("hidden");
   adminContent?.removeAttribute("hidden");
 }
 
-function requireLogin() {
-  if (isAuthenticated()) {
-    showAdmin();
-    return;
-  }
+function hideAdminShell() {
   adminContent?.setAttribute("hidden", "");
   adminNav?.setAttribute("hidden", "");
   adminFooter?.setAttribute("hidden", "");
@@ -123,21 +94,45 @@ function requireLogin() {
   }
 }
 
-loginForm?.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const data = new FormData(loginForm);
-  if (data.get("username") === ADMIN_USER && data.get("password") === ADMIN_PASSWORD) {
-    sessionStorage.setItem("mucubaAdminAuth", "true");
-    loginError.textContent = "";
-    showAdmin();
+async function showAdmin() {
+  showAdminShell();
+  await loadRemoteAdminData();
+}
+
+function requireLogin() {
+  if (isAuthenticated()) {
+    showAdmin().catch((error) => {
+      sessionStorage.removeItem(ADMIN_TOKEN_KEY);
+      loginError.textContent = error.message;
+      hideAdminShell();
+    });
     return;
   }
-  loginError.textContent = "Usuario o clave incorrectos.";
+  hideAdminShell();
+}
+
+loginForm?.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const data = new FormData(loginForm);
+  loginError.textContent = "";
+  try {
+    const result = await apiJson("/api/mucuba/login", {
+      method: "POST",
+      body: JSON.stringify({
+        username: data.get("username"),
+        password: data.get("password")
+      })
+    });
+    sessionStorage.setItem(ADMIN_TOKEN_KEY, result.token);
+    await showAdmin();
+  } catch (error) {
+    loginError.textContent = error.message;
+  }
 });
 
 document.querySelector("[data-logout]")?.addEventListener("click", (event) => {
   event.preventDefault();
-  sessionStorage.removeItem("mucubaAdminAuth");
+  sessionStorage.removeItem(ADMIN_TOKEN_KEY);
   window.location.reload();
 });
 
@@ -149,25 +144,37 @@ function parseMoney(value) {
   return Number(String(value).replace(/[^\d]/g, "")) || 0;
 }
 
-function loadListings() {
-  try {
-    const stored = JSON.parse(localStorage.getItem(CLUB_STORAGE_KEY) || "null");
-    return Array.isArray(stored) && stored.length ? stored : demoListings;
-  } catch {
-    return demoListings;
-  }
-}
-
 function normalizeListings(items) {
-  return items.map((item) => ({
+  return (items || []).map((item) => ({
     ...item,
     status: item.status || "active",
-    blockedDates: Array.isArray(item.blockedDates) ? item.blockedDates : []
+    blockedDates: Array.isArray(item.blockedDates) ? item.blockedDates : [],
+    photos: Array.isArray(item.photos) ? item.photos : []
   }));
 }
 
-function saveListings() {
-  localStorage.setItem(CLUB_STORAGE_KEY, JSON.stringify(listings));
+async function loadRemoteAdminData() {
+  const data = await apiJson("/api/mucuba/listings", {
+    headers: authHeaders()
+  });
+  siteData = {
+    heroVideoUrl: data.heroVideoUrl || "",
+    listings: Array.isArray(data.listings) && data.listings.length ? data.listings : demoListings
+  };
+  listings = normalizeListings(siteData.listings);
+  renderAdminList();
+  updateVideoStatus();
+}
+
+async function saveRemoteData() {
+  await apiJson("/api/mucuba/listings", {
+    method: "PUT",
+    headers: authHeaders(),
+    body: JSON.stringify({
+      listings,
+      heroVideoUrl: siteData.heroVideoUrl || ""
+    })
+  });
 }
 
 function parseDateList(value) {
@@ -191,13 +198,35 @@ function datesInRange(start, end) {
   return dates;
 }
 
-function filesToDataUrls(files) {
-  return Promise.all([...files].slice(0, 8).map((file) => new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  })));
+async function uploadFile(file, folder) {
+  const contentType = file.type || "application/octet-stream";
+  const preparedUpload = await apiJson("/api/mucuba/presign-upload", {
+    method: "POST",
+    headers: authHeaders(),
+    body: JSON.stringify({
+      fileName: file.name,
+      contentType,
+      folder
+    })
+  });
+  const uploadResponse = await fetch(preparedUpload.uploadUrl, {
+    method: "PUT",
+    headers: { "Content-Type": preparedUpload.contentType || contentType },
+    body: file
+  });
+  if (!uploadResponse.ok) {
+    throw new Error("No fue posible cargar el archivo a AWS. Revisa CORS y permisos del bucket S3.");
+  }
+  return { url: preparedUpload.url };
+}
+
+async function uploadFiles(files, folder) {
+  const uploaded = [];
+  for (const file of [...files]) {
+    const result = await uploadFile(file, folder);
+    uploaded.push(result.url);
+  }
+  return uploaded;
 }
 
 function renderAdminList() {
@@ -207,7 +236,7 @@ function renderAdminList() {
         <span class="admin-status ${listing.status}">${listing.status === "active" ? "Activo" : "Oculto"}</span>
         <h3>${listing.name}</h3>
         <p>${listing.type === "glamping" ? "Glamping" : "Habitación"} · ${listing.guests} huéspedes · ${formatCurrency(listing.price)} / noche</p>
-        <small>${(listing.blockedDates || []).length} día${(listing.blockedDates || []).length === 1 ? "" : "s"} bloqueado${(listing.blockedDates || []).length === 1 ? "" : "s"}</small>
+        <small>${(listing.blockedDates || []).length} día${(listing.blockedDates || []).length === 1 ? "" : "s"} bloqueado${(listing.blockedDates || []).length === 1 ? "" : "s"} · ${(listing.photos || []).length} foto${(listing.photos || []).length === 1 ? "" : "s"}</small>
       </div>
       <div class="admin-actions">
         <button type="button" data-edit="${listing.id}">Editar</button>
@@ -249,31 +278,41 @@ adminForm?.addEventListener("submit", async (event) => {
   const data = new FormData(adminForm);
   const id = data.get("id") || `stay-${Date.now()}`;
   const existing = listings.find((item) => item.id === id);
-  const uploadedPhotos = await filesToDataUrls(data.getAll("photos").filter((file) => file.size));
-  const listing = {
-    id,
-    status: data.get("status"),
-    name: data.get("name").trim(),
-    type: data.get("type"),
-    price: parseMoney(data.get("price")),
-    guests: Number(data.get("guests")),
-    beds: Number(data.get("beds")),
-    baths: Number(data.get("baths")),
-    summary: data.get("summary").trim(),
-    amenities: String(data.get("amenities") || "").split(",").map((item) => item.trim()).filter(Boolean),
-    blockedDates: parseDateList(data.get("blockedDates")),
-    photos: uploadedPhotos.length ? uploadedPhotos : (existing?.photos || []),
-    tone: data.get("type") === "glamping" ? "forest" : "suite"
-  };
-  listings = existing
-    ? listings.map((item) => item.id === id ? listing : item)
-    : [listing, ...listings];
-  saveListings();
-  renderAdminList();
-  resetForm();
+  const button = adminForm.querySelector("button[type='submit']");
+  button.disabled = true;
+  button.textContent = "Guardando...";
+  try {
+    const uploadedPhotos = await uploadFiles(data.getAll("photos").filter((file) => file.size), `rooms/${id}`);
+    const listing = {
+      id,
+      status: data.get("status"),
+      name: data.get("name").trim(),
+      type: data.get("type"),
+      price: parseMoney(data.get("price")),
+      guests: Number(data.get("guests")),
+      beds: Number(data.get("beds")),
+      baths: Number(data.get("baths")),
+      summary: data.get("summary").trim(),
+      amenities: String(data.get("amenities") || "").split(",").map((item) => item.trim()).filter(Boolean),
+      blockedDates: parseDateList(data.get("blockedDates")),
+      photos: uploadedPhotos.length ? uploadedPhotos : (existing?.photos || []),
+      tone: data.get("type") === "glamping" ? "forest" : "suite"
+    };
+    listings = existing
+      ? listings.map((item) => item.id === id ? listing : item)
+      : [listing, ...listings];
+    await saveRemoteData();
+    renderAdminList();
+    resetForm();
+  } catch (error) {
+    alert(error.message);
+  } finally {
+    button.disabled = false;
+    button.textContent = "Guardar publicación";
+  }
 });
 
-adminList?.addEventListener("click", (event) => {
+adminList?.addEventListener("click", async (event) => {
   if (!isAuthenticated()) return;
   const editButton = event.target.closest("[data-edit]");
   const toggleButton = event.target.closest("[data-toggle]");
@@ -283,12 +322,12 @@ adminList?.addEventListener("click", (event) => {
     listings = listings.map((item) => item.id === toggleButton.dataset.toggle
       ? { ...item, status: item.status === "active" ? "hidden" : "active" }
       : item);
-    saveListings();
+    await saveRemoteData();
     renderAdminList();
   }
   if (deleteButton && confirm("¿Eliminar esta publicación?")) {
     listings = listings.filter((item) => item.id !== deleteButton.dataset.delete);
-    saveListings();
+    await saveRemoteData();
     renderAdminList();
     resetForm();
   }
@@ -308,14 +347,20 @@ document.querySelector("[data-new-listing]")?.addEventListener("click", () => {
   resetForm();
 });
 
-document.querySelector("[data-reset-club]")?.addEventListener("click", () => {
+document.querySelector("[data-reset-club]")?.addEventListener("click", async () => {
   if (!isAuthenticated()) return;
-  if (!confirm("¿Restaurar publicaciones demo? Esto reemplaza los alojamientos guardados en este navegador.")) return;
+  if (!confirm("¿Restaurar publicaciones demo? Esto reemplaza los alojamientos guardados en AWS.")) return;
   listings = demoListings;
-  saveListings();
+  await saveRemoteData();
   renderAdminList();
   resetForm();
 });
+
+function updateVideoStatus() {
+  videoStatus.textContent = siteData.heroVideoUrl
+    ? "Video principal conectado desde AWS."
+    : "Sin video cargado desde AWS.";
+}
 
 document.querySelector("[data-save-hero-video]")?.addEventListener("click", async () => {
   if (!isAuthenticated()) return;
@@ -324,21 +369,23 @@ document.querySelector("[data-save-hero-video]")?.addEventListener("click", asyn
     videoStatus.textContent = "Selecciona un archivo de video primero.";
     return;
   }
-  videoStatus.textContent = "Guardando video...";
+  videoStatus.textContent = "Subiendo video a AWS...";
   try {
-    await putMedia(HERO_VIDEO_KEY, file);
-    videoStatus.textContent = "Video guardado en este navegador. Abre la landing aquí para verlo.";
-  } catch {
-    videoStatus.textContent = "No fue posible guardar el video. Intenta con un archivo más liviano.";
+    const result = await uploadFile(file, "hero");
+    siteData.heroVideoUrl = result.url;
+    await saveRemoteData();
+    updateVideoStatus();
+  } catch (error) {
+    videoStatus.textContent = error.message;
   }
 });
 
 document.querySelector("[data-remove-hero-video]")?.addEventListener("click", async () => {
   if (!isAuthenticated()) return;
-  await deleteMedia(HERO_VIDEO_KEY);
+  siteData.heroVideoUrl = "";
+  await saveRemoteData();
   if (videoInput) videoInput.value = "";
-  videoStatus.textContent = "Video removido. La landing usará el archivo assets/mucuba-hotel-video.mp4 si existe.";
+  updateVideoStatus();
 });
 
-renderAdminList();
 requireLogin();

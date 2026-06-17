@@ -1,7 +1,4 @@
 const CLUB_STORAGE_KEY = "mucubaClubListings";
-const CLUB_MEDIA_DB = "mucubaClubMedia";
-const CLUB_MEDIA_STORE = "media";
-const HERO_VIDEO_KEY = "heroVideo";
 
 const currency = new Intl.NumberFormat("es-CO", {
   style: "currency",
@@ -65,37 +62,16 @@ const searchForm = document.querySelector("[data-club-search]");
 const searchStatus = document.querySelector("[data-search-status]");
 let currentFilter = "todos";
 let searchState = { checkIn: "", checkOut: "", guests: 1 };
-let listings = normalizeListings(loadListings());
-
-function openMediaDb() {
-  return new Promise((resolve, reject) => {
-    const request = indexedDB.open(CLUB_MEDIA_DB, 1);
-    request.onupgradeneeded = () => request.result.createObjectStore(CLUB_MEDIA_STORE);
-    request.onsuccess = () => resolve(request.result);
-    request.onerror = () => reject(request.error);
-  });
-}
-
-async function getMedia(key) {
-  const db = await openMediaDb();
-  return new Promise((resolve, reject) => {
-    const request = db.transaction(CLUB_MEDIA_STORE, "readonly").objectStore(CLUB_MEDIA_STORE).get(key);
-    request.onsuccess = () => resolve(request.result);
-    request.onerror = () => reject(request.error);
-  });
-}
+let siteData = { heroVideoUrl: "" };
+let listings = normalizeListings(demoListings);
 
 async function loadHeroVideo() {
   const video = document.querySelector("[data-hero-video]");
   if (!video) return;
-  try {
-    const blob = await getMedia(HERO_VIDEO_KEY);
-    if (!blob) return;
-    video.src = URL.createObjectURL(blob);
+  if (siteData.heroVideoUrl) {
+    video.src = siteData.heroVideoUrl;
     video.load();
     video.play().catch(() => {});
-  } catch {
-    // Si el navegador no permite IndexedDB, conserva el video de assets.
   }
 }
 
@@ -109,6 +85,18 @@ function loadListings() {
     return Array.isArray(stored) && stored.length ? stored : demoListings;
   } catch {
     return demoListings;
+  }
+}
+
+async function loadRemoteData() {
+  try {
+    const response = await fetch("/api/mucuba/listings");
+    if (!response.ok) throw new Error("AWS no configurado");
+    const data = await response.json();
+    siteData = data;
+    listings = normalizeListings(Array.isArray(data.listings) && data.listings.length ? data.listings : demoListings);
+  } catch {
+    listings = normalizeListings(loadListings());
   }
 }
 
@@ -372,6 +360,11 @@ if (bookingParam) {
   window.history.replaceState({}, "", url.toString());
 }
 
-renderListings();
-updateSearchStatus();
-loadHeroVideo();
+async function initClub() {
+  await loadRemoteData();
+  renderListings();
+  updateSearchStatus();
+  loadHeroVideo();
+}
+
+initClub();
