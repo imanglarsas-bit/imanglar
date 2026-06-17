@@ -1,4 +1,9 @@
 const CLUB_STORAGE_KEY = "mucubaClubListings";
+const CLUB_MEDIA_DB = "mucubaClubMedia";
+const CLUB_MEDIA_STORE = "media";
+const HERO_VIDEO_KEY = "heroVideo";
+const ADMIN_USER = "admin";
+const ADMIN_PASSWORD = "Mucuba2026";
 
 const currency = new Intl.NumberFormat("es-CO", {
   style: "currency",
@@ -39,7 +44,7 @@ const demoListings = [
   },
   {
     id: "suite-familiar",
-    name: "Suite Familiar del Club",
+    name: "Suite Familiar Mucuba",
     type: "habitacion",
     status: "active",
     price: 360000,
@@ -57,7 +62,67 @@ const demoListings = [
 const adminList = document.querySelector("[data-admin-list]");
 const adminForm = document.querySelector("[data-admin-form]");
 const editorTitle = document.querySelector("[data-editor-title]");
+const loginScreen = document.querySelector("[data-admin-login]");
+const adminContent = document.querySelector("[data-admin-content]");
+const loginForm = document.querySelector("[data-login-form]");
+const loginError = document.querySelector("[data-login-error]");
+const videoInput = document.querySelector("[data-hero-video-input]");
+const videoStatus = document.querySelector("[data-video-status]");
 let listings = normalizeListings(loadListings());
+
+function openMediaDb() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(CLUB_MEDIA_DB, 1);
+    request.onupgradeneeded = () => request.result.createObjectStore(CLUB_MEDIA_STORE);
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+}
+
+async function putMedia(key, blob) {
+  const db = await openMediaDb();
+  return new Promise((resolve, reject) => {
+    const request = db.transaction(CLUB_MEDIA_STORE, "readwrite").objectStore(CLUB_MEDIA_STORE).put(blob, key);
+    request.onsuccess = () => resolve();
+    request.onerror = () => reject(request.error);
+  });
+}
+
+async function deleteMedia(key) {
+  const db = await openMediaDb();
+  return new Promise((resolve, reject) => {
+    const request = db.transaction(CLUB_MEDIA_STORE, "readwrite").objectStore(CLUB_MEDIA_STORE).delete(key);
+    request.onsuccess = () => resolve();
+    request.onerror = () => reject(request.error);
+  });
+}
+
+function showAdmin() {
+  loginScreen?.setAttribute("hidden", "");
+  adminContent?.removeAttribute("hidden");
+}
+
+function requireLogin() {
+  if (sessionStorage.getItem("mucubaAdminAuth") === "true") showAdmin();
+}
+
+loginForm?.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const data = new FormData(loginForm);
+  if (data.get("username") === ADMIN_USER && data.get("password") === ADMIN_PASSWORD) {
+    sessionStorage.setItem("mucubaAdminAuth", "true");
+    loginError.textContent = "";
+    showAdmin();
+    return;
+  }
+  loginError.textContent = "Usuario o clave incorrectos.";
+});
+
+document.querySelector("[data-logout]")?.addEventListener("click", (event) => {
+  event.preventDefault();
+  sessionStorage.removeItem("mucubaAdminAuth");
+  window.location.reload();
+});
 
 function formatCurrency(value) {
   return currency.format(Number(value || 0)).replace(/\s/g, " ");
@@ -228,4 +293,26 @@ document.querySelector("[data-reset-club]")?.addEventListener("click", () => {
   resetForm();
 });
 
+document.querySelector("[data-save-hero-video]")?.addEventListener("click", async () => {
+  const file = videoInput?.files?.[0];
+  if (!file) {
+    videoStatus.textContent = "Selecciona un archivo de video primero.";
+    return;
+  }
+  videoStatus.textContent = "Guardando video...";
+  try {
+    await putMedia(HERO_VIDEO_KEY, file);
+    videoStatus.textContent = "Video guardado en este navegador. Abre la landing aquí para verlo.";
+  } catch {
+    videoStatus.textContent = "No fue posible guardar el video. Intenta con un archivo más liviano.";
+  }
+});
+
+document.querySelector("[data-remove-hero-video]")?.addEventListener("click", async () => {
+  await deleteMedia(HERO_VIDEO_KEY);
+  if (videoInput) videoInput.value = "";
+  videoStatus.textContent = "Video removido. La landing usará el archivo assets/mucuba-hotel-video.mp4 si existe.";
+});
+
 renderAdminList();
+requireLogin();

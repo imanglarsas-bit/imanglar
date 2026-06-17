@@ -1,4 +1,7 @@
 const CLUB_STORAGE_KEY = "mucubaClubListings";
+const CLUB_MEDIA_DB = "mucubaClubMedia";
+const CLUB_MEDIA_STORE = "media";
+const HERO_VIDEO_KEY = "heroVideo";
 
 const currency = new Intl.NumberFormat("es-CO", {
   style: "currency",
@@ -39,7 +42,7 @@ const demoListings = [
   },
   {
     id: "suite-familiar",
-    name: "Suite Familiar del Club",
+    name: "Suite Familiar Mucuba",
     type: "habitacion",
     status: "active",
     price: 360000,
@@ -63,6 +66,38 @@ const searchStatus = document.querySelector("[data-search-status]");
 let currentFilter = "todos";
 let searchState = { checkIn: "", checkOut: "", guests: 1 };
 let listings = normalizeListings(loadListings());
+
+function openMediaDb() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(CLUB_MEDIA_DB, 1);
+    request.onupgradeneeded = () => request.result.createObjectStore(CLUB_MEDIA_STORE);
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+}
+
+async function getMedia(key) {
+  const db = await openMediaDb();
+  return new Promise((resolve, reject) => {
+    const request = db.transaction(CLUB_MEDIA_STORE, "readonly").objectStore(CLUB_MEDIA_STORE).get(key);
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+}
+
+async function loadHeroVideo() {
+  const video = document.querySelector("[data-hero-video]");
+  if (!video) return;
+  try {
+    const blob = await getMedia(HERO_VIDEO_KEY);
+    if (!blob) return;
+    video.src = URL.createObjectURL(blob);
+    video.load();
+    video.play().catch(() => {});
+  } catch {
+    // Si el navegador no permite IndexedDB, conserva el video de assets.
+  }
+}
 
 function formatCurrency(value) {
   return currency.format(Number(value || 0)).replace(/\s/g, " ");
@@ -188,7 +223,7 @@ function buildModal(listing) {
     <div class="club-gallery">${gallery}</div>
     <div class="club-booking-layout">
       <section>
-        <p class="club-eyebrow">${listing.type === "glamping" ? "Glamping" : "Habitación"} · Mucuba Club</p>
+        <p class="club-eyebrow">${listing.type === "glamping" ? "Glamping" : "Habitación"} · Mucuba Hotel & Glamping</p>
         <h2>${listing.name}</h2>
         <p>${listing.summary}</p>
         <div class="club-card-meta club-card-meta-large">
@@ -339,3 +374,4 @@ if (bookingParam) {
 
 renderListings();
 updateSearchStatus();
+loadHeroVideo();

@@ -46,7 +46,8 @@
 }
 
 .club-brand img {
-  width: 142px;
+  width: 220px;
+  max-width: 46vw;
   display: block;
 }
 
@@ -71,11 +72,13 @@
 }
 
 .club-hero {
-  display: grid;
-  grid-template-columns: minmax(0, 1.08fr) minmax(300px, 0.72fr);
-  gap: clamp(28px, 5vw, 72px);
+  position: relative;
+  min-height: 100svh;
+  display: flex;
   align-items: center;
-  padding: clamp(70px, 9vw, 130px) clamp(20px, 5vw, 72px);
+  justify-content: center;
+  padding: clamp(96px, 12vw, 150px) clamp(20px, 5vw, 72px);
+  overflow: hidden;
 }
 
 .club-eyebrow {
@@ -97,6 +100,11 @@
 }
 
 .club-hero h1 {
+  color: #ffffff;
+  text-shadow: 0 18px 52px rgba(0, 0, 0, 0.28);
+}
+
+.club-hero h1 {
   max-width: 900px;
   font-size: clamp(3rem, 7vw, 6.8rem);
   line-height: 0.92;
@@ -105,9 +113,29 @@
 .club-hero-copy > p:not(.club-eyebrow) {
   max-width: 720px;
   margin: 26px 0 0;
-  color: var(--club-muted);
+  color: rgba(255, 255, 255, 0.82);
   font-size: clamp(1.02rem, 1.6vw, 1.28rem);
   line-height: 1.7;
+}
+
+.club-hero-copy {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 980px;
+  text-align: center;
+}
+
+.club-hero-logo {
+  width: min(680px, 88vw);
+  margin-bottom: 26px;
+  filter: drop-shadow(0 18px 36px rgba(0, 0, 0, 0.36));
+}
+
+.club-hero .club-eyebrow {
+  color: rgba(255, 255, 255, 0.78);
 }
 
 .club-hero-actions {
@@ -161,13 +189,27 @@
 }
 
 .club-video-card {
-  position: relative;
-  min-height: clamp(360px, 42vw, 620px);
+  position: absolute;
+  inset: 0;
+  min-height: 100%;
   padding: 0;
   overflow: hidden;
+  border-radius: 0;
+  box-shadow: none;
   background:
     radial-gradient(circle at 74% 22%, rgba(124, 181, 24, 0.35), transparent 36%),
     linear-gradient(145deg, #102918 0%, #193b24 48%, #0b170f 100%);
+}
+
+.club-video-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background:
+    linear-gradient(180deg, rgba(4, 12, 8, 0.32) 0%, rgba(4, 12, 8, 0.48) 46%, rgba(4, 12, 8, 0.8) 100%),
+    radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.24) 72%);
+  pointer-events: none;
 }
 
 .club-hero-video {
@@ -250,9 +292,9 @@
 
 .club-search-section {
   padding: 0 clamp(20px, 5vw, 72px) clamp(36px, 5vw, 60px);
-  margin-top: -36px;
+  margin-top: -58px;
   position: relative;
-  z-index: 3;
+  z-index: 6;
 }
 
 .club-search {
@@ -648,6 +690,82 @@
   opacity: 1;
 }
 
+.admin-login {
+  min-height: calc(100svh - 90px);
+  display: grid;
+  place-items: center;
+  padding: 48px 20px;
+}
+
+.admin-login-card {
+  width: min(420px, 100%);
+  display: grid;
+  gap: 14px;
+  padding: 30px;
+  border: 1px solid var(--club-line);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 28px 80px rgba(16, 41, 24, 0.14);
+}
+
+.admin-login-card img {
+  width: 240px;
+  max-width: 100%;
+  margin-bottom: 8px;
+}
+
+.admin-login-card h1 {
+  margin: 0 0 8px;
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  line-height: 0.98;
+}
+
+.admin-login-card label {
+  display: grid;
+  gap: 7px;
+  font-weight: 900;
+}
+
+.admin-login-card input {
+  min-height: 46px;
+  border: 1px solid var(--club-line);
+  border-radius: 14px;
+  padding: 0 13px;
+  font: inherit;
+}
+
+.admin-login-error {
+  min-height: 20px;
+  margin: 0;
+  color: #b3261e;
+  font-weight: 800;
+}
+
+.admin-video-panel {
+  padding-top: 22px;
+  padding-bottom: 22px;
+}
+
+.admin-video-tools {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 18px;
+  border: 1px solid var(--club-line);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.86);
+}
+
+.admin-video-tools input {
+  max-width: 320px;
+}
+
+.admin-video-tools small {
+  color: var(--club-muted);
+  font-weight: 800;
+}
+
 .admin-hero {
   padding-bottom: 30px;
 }
@@ -821,7 +939,8 @@
   }
 
   .club-hero {
-    padding-top: 48px;
+    min-height: 92svh;
+    padding-top: 88px;
   }
 
   .club-grid,
